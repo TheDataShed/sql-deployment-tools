@@ -1,0 +1,2 @@
+-r base.txt
+pyinstaller==5.0.1

@@ -1,0 +1,2 @@
+class SqlAgentOperatorException(Exception):
+    pass

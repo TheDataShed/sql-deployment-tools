@@ -1,0 +1,33 @@
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+  # TODO: pre-commit
+
+  - task: Bash@3
+    displayName: Build Executable (Ubuntu)
+    inputs:
+      filePath: "build.sh"
+
+  - task: Bash@3
+    displayName: Build Python Application
+    inputs:
+      targetType: "inline"
+      script: |
+        pip install --quiet --requirement requirements/base.txt --target $(Build.ArtifactStagingDirectory)
+        cp --recursiuve sql/ $(Build.ArtifactStagingDirectory)
+        cp *.py $(Build.ArtifactStagingDirectory)
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish Python Application
+    inputs:
+      PathtoPublish: "$(Build.ArtifactStagingDirectory)"
+      ArtifactName: "python"
+      publishLocation: "Container"
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish Executable
+    inputs:
+      PathtoPublish: "dist/ssis-deployment"
+      ArtifactName: "exe"
+      publishLocation: "Container"

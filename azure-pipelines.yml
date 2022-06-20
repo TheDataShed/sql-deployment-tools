@@ -1,0 +1,21 @@
+trigger:
+- main
+
+pool:
+  vmImage: windows-latest
+
+steps:
+  # TODO: pre-commit
+
+  - task: BatchScript@1
+    displayName: Build Executable (Windows)
+    inputs:
+      filename: "build.bat"
+
+  - task: PublishBuildArtifacts@1
+    displayName: Publish Executable (main only)
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    inputs:
+      PathtoPublish: "dist/windows/ssis-deployment.exe"
+      ArtifactName: "windows"
+      publishLocation: "Container"

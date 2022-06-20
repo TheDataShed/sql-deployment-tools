@@ -1,0 +1,4 @@
+dataclasses-json==0.5.7
+pyodbc==4.0.32
+sqlparams==3.0.0
+toml==0.10.2
