@@ -2,6 +2,12 @@
 
 ## Pre-requisites
 
+Linux will require permissions to run the build script:
+
+```bash
+chmod +x build.sh
+```
+
 ### Software
 
 - Build agent requires:
