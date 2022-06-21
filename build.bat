@@ -7,14 +7,14 @@ pip install ^
 rmdir /S /Q .\dist\windows
 
 pyinstaller ^
-    ssis-deployment.py ^
+    src\sql-deployment-tools.py ^
     --clean ^
     --noconfirm ^
     --log-level WARN ^
     --distpath="dist\windows" ^
     --onefile ^
     --console ^
-    --add-data="sql\;sql"
+    --add-data="src\sql\;sql"
 
 :: Run the app to check it has at least built!
-.\dist\windows\ssis-deployment --help
+.\dist\windows\sql-deployment-tools --help

@@ -10,14 +10,14 @@ rm -rf dist/unix/
 
 # Create the executable!
 pyinstaller \
-    ssis-deployment.py \
+    src/sql-deployment-tools.py \
     --clean \
     --noconfirm \
     --log-level WARN \
     --onefile \
     --console \
-    --add-data "./sql:sql" \
+    --add-data "./src/sql:sql" \
     --distpath="dist/unix"
 
 # Run the app to check it has at least built!
-./dist/unix/ssis-deployment --help
+./dist/unix/sql-deployment-tools --help
