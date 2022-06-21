@@ -6,7 +6,7 @@
 
 - Build agent requires:
   - Windows OS
-  - PowerShell (currentl implementation)
+  - PowerShell (current implementation)
 - DevOps extensions:
   - [SSIS DevOps Tools](https://marketplace.visualstudio.com/items?itemName=SSIS.ssis-devops-tools)
 
@@ -15,7 +15,7 @@
 Each target SSIS server requires:
 
 1. Add build agent account as SQL login
-1. Create user in `SSISB` for build agent login
+1. Create user in `SSISDB` for build agent login
 1. Add the build agent user to the following roles in `SSISDB`:
    1. `ssis_admin`
    1. `db_datareader`
