@@ -40,7 +40,8 @@ This will create `dist/ssis-deployment.exe`.
 1. Deploy `*.ispac` artifact to SSISDB (using SSIS DevOps Tools extension)
    1. This can include the creation of the SSIS folder/project
 1. Create SSIS environment
-1. Create SSIS environment reference (links the folder with the SSIS environment)
+1. Create SSIS environment reference (links the folder with the SSIS
+   environment)
 1. Remove/reset all SSIS environment variables
 1. For each project parameter:
    1. Create/set variable
@@ -95,11 +96,11 @@ every_n_minutes = 111
 
 Note the `{SECRET_VALUE}` token in the above config.
 
-This placeholder approach allows for source control of the configuration
- without storing secrets.
+This placeholder approach allows for source control of the configuration without
+storing secrets.
 
-Secrets/tokens can then be injected at deployment time using the `--replacement-tokens`
- argument, e.g.:
+Secrets/tokens can then be injected at deployment time using the
+`--replacement-tokens` argument, e.g.:
 
 ```bash
 ssis-deployment deploy --replacement-tokens '{"SECRET_VALUE": "actual super secret value"}'

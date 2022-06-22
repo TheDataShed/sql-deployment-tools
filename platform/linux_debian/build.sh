@@ -1,23 +1,24 @@
 #! /bin/bash
 
 # Install the required Python libraries, including `pyinstaller`
+pip install --upgrade pip
 pip install \
     --quiet \
     --requirement requirements/build.txt
 
-# Keep things clean: destroy the `dist/unix/` directory if it exists.
-rm -rf dist/unix/
+# Keep things clean: destroy the `dist/debian/` directory if it exists.
+rm -rf dist/debian/
 
 # Create the executable!
 pyinstaller \
-    ssis-deployment.py \
+    ./src/sql-deployment-tools.py \
     --clean \
     --noconfirm \
     --log-level WARN \
     --onefile \
     --console \
-    --add-data "./sql:sql" \
-    --distpath="dist/unix"
+    --add-data "./src/sql:sql" \
+    --distpath="dist/debian"
 
 # Run the app to check it has at least built!
-./dist/unix/ssis-deployment --help
+./dist/debian/sql-deployment-tools --help
