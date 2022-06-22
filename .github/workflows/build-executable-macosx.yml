@@ -1,0 +1,26 @@
+name: SQL Deployment Tools - Mac OSX
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches: main
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        name: Checkout Repository
+
+      - name: Build Executable (Mac OSX)
+        run: |
+          sh ./platform/mac_osx/build.sh
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: exe
+          path: dist/macosx/sql-deployment-tools
+        name: Upload Executable
