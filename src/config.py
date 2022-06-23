@@ -1,6 +1,6 @@
 import toml
 
-from model import SsisDeployment
+from src.model import SsisDeployment
 
 
 class ConfigurationError(Exception):
