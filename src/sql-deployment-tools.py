@@ -3,9 +3,9 @@ import json
 import os
 import sys
 
-from config import ConfigurationError, load_configuration
-from deploy import deploy_ssis
-from model import SsisDeployment
+from src.config import ConfigurationError, load_configuration
+from src.deploy import deploy_ssis
+from src.model import SsisDeployment
 
 if __name__ == "__main__":
     parent_parser = argparse.ArgumentParser(description="SSIS Deployment Helper")

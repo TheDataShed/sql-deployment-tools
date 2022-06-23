@@ -1,5 +1,11 @@
 # SSIS Deployments
 
+![SQL Deployment Tools CI](https://github.com/TheDataShed/sql-deployment-tools/actions/workflows/sql-deployment-tools-ci.yml/badge.svg)
+![SQL Deployment Tools - Windows](https://github.com/TheDataShed/sql-deployment-tools/actions/workflows/build-executable-windows.yml/badge.svg)
+![SQL Deployment Tools - Debian](https://github.com/TheDataShed/sql-deployment-tools/actions/workflows/build-executable-debian.yml/badge.svg)
+![SQL Deployment Tools - Mac OSX](https://github.com/TheDataShed/sql-deployment-tools/actions/workflows/build-executable-macosx.yml/badge.svg)
+![Unit Test Results](https://gist.github.com/GooseLF/dabe49eaf9102b6392e3845b2048d664/raw/badge.svg)
+
 ## Pre-requisites
 
 Linux will require permissions to run the build script:

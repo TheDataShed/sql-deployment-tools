@@ -1,8 +1,8 @@
 import toml
 
-from exceptions import SqlAgentOperatorException
-from model import SsisDeployment
-from sql.db import Database
+from src.exceptions import SqlAgentOperatorException
+from src.model import SsisDeployment
+from src.sql.db import Database
 
 
 def deploy_ssis(
