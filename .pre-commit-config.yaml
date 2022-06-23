@@ -7,8 +7,6 @@ repos:
     hooks:
       - id: prettier
         files: \.(md)$
-        stages:
-          - commit
         args:
           - "--prose-wrap"
           - "always"
@@ -16,7 +14,6 @@ repos:
     rev: v0.31.1
     hooks:
       - id: markdownlint
-        verbose: true
   - repo: https://github.com/psf/black
     rev: "22.3.0" # Use the sha or tag you want to point at
     hooks:
@@ -28,17 +25,13 @@ repos:
         minimum_pre_commit_version: 2.9.2
         require_serial: true
         types_or: [python, pyi]
-        verbose: true
   - repo: https://github.com/pycqa/isort
     rev: 5.10.1
     hooks:
       - id: isort
         name: isort (python)
-        verbose: true
   - repo: https://github.com/commitizen-tools/commitizen
-    rev: master
+    rev: v2.27.1
     hooks:
       - id: commitizen
-        verbose: true
-        stage:
-          - commit
+        stages: [commit-msg]

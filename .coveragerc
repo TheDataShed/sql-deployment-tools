@@ -1,2 +1,11 @@
 [run]
+source = .
 omit = test/*, .venv/*
+command_line = --module pytest
+
+[report]
+show_missing = True
+omit = test/*
+sort = cover
+skip_empty = True
+# fail_under = 100
