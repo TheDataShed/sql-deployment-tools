@@ -9,18 +9,21 @@ unixodbc_ver=$((brew info unixodbc --json) | jq -r '.[0].linked_keg')
 export LDFLAGS="-L/opt/homebrew/Cellar/unixodbc/$unixodbc_ver/lib"
 export CPPFLAGS="-I/opt/homebrew/Cellar/unixodbc/$unixodbc_ver/include"
 
+#Set up venv
+python3 -m venv .venv
+source ./.venv/bin/activate
+
 # Install the required Python libraries, including `pyinstaller`
-python3 -m pip install --upgrade pip
-python3 -m pip install \
+pip install --upgrade pip
+pip install \
     --quiet \
-    --requirement requirements/build.txt \
-    --user
+    --requirement requirements/build.txt
 
 # Keep things clean: destroy the `dist/macosx/` directory if it exists.
 rm -rf dist/macosx/
 
 # Create the executable!
-python3 -m PyInstaller ./src/sql-deployment-tools.py \
+PyInstaller ./src/sql-deployment-tools.py \
     --clean \
     --noconfirm \
     --log-level WARN \
