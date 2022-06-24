@@ -30,6 +30,10 @@ jobs:
         run: |
           sh ./test/run_tests.sh
 
+      - name: Validate Test Results
+        run: |
+          sh ./test/validate_results.sh
+
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v1
         id: test-results
