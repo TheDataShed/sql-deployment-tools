@@ -16,7 +16,7 @@ class TestConfig:
         """
         Test that a valid configuration returns a 'SsisDeployment' object.
         """
-        tomlConfig = get_config_text(VALID_CONFIG)
+        tomlConfig = toml.dumps(TEST_CONFIG)
 
         assert_type(load_configuration(tomlConfig), SsisDeployment)
 
@@ -24,7 +24,7 @@ class TestConfig:
         """
         Test that an invalid configuration raises an exception.
         """
-        tomlConfig = get_config_text(INVALID_CONFIG)
+        tomlConfig = toml.dumps("")
 
         with pytest.raises(ConfigurationError):
             load_configuration(tomlConfig)

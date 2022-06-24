@@ -1,3 +1,4 @@
+import copy
 import datetime
 from cmath import exp
 from json import load
@@ -108,63 +109,263 @@ class TestNotifyLevelEmail:
 
 class TestSsisDeployment:
     def test_SsisDeployment_Project_is_set_correctly(self):
+        """
+        Test project is set correctly.
+        """
         expected = "Bob Ross"
-        actual = load_configuration(get_config_text(VALID_CONFIG))
+        actual = load_configuration(toml.dumps(TEST_CONFIG))
         assert actual.project == expected
 
     def test_SsisDeployment_Folder_is_set_correctly(self):
+        """
+        Test folder is set correctly.
+        """
         expected = "def"
-        actual = load_configuration(get_config_text(VALID_CONFIG))
+        actual = load_configuration(toml.dumps(TEST_CONFIG))
         assert actual.folder == expected
 
     def test_SsisDeployment_Environment_is_set_correctly(self):
+        """
+        Test environment is set correctly.
+        """
         expected = "default"
-        actual = load_configuration(get_config_text(VALID_CONFIG))
+        actual = load_configuration(toml.dumps(TEST_CONFIG))
         assert actual.environment == expected
 
     def test_SsisDeployment_Job_Name_is_set_correctly(self):
-        expected = "whatever"
-        actual = load_configuration(get_config_text(VALID_CONFIG))
+        """
+        Test job name is set correctly.
+        """
+        expected = "Season 1 Episode 3"
+        actual = load_configuration(toml.dumps(TEST_CONFIG))
         assert actual.job.name == expected
 
     def test_SsisDeployment_Job_Description_is_set_correctly(self):
-        expected = "cool"
-        actual = load_configuration(get_config_text(VALID_CONFIG))
+        """
+        Test job description is set correctly.
+        """
+        expected = "Ebony Sunset"
+        actual = load_configuration(toml.dumps(TEST_CONFIG))
         assert actual.job.description == expected
 
     def test_SsisDeployment_Job_Enabled_Flag_is_set_correctly(self):
+        """
+        Test job enabled flag is set correctly.
+        """
         expected = True
-        actual = load_configuration(get_config_text(VALID_CONFIG))
+        actual = load_configuration(toml.dumps(TEST_CONFIG))
         assert actual.job.enabled == expected
 
     def test_SsisDeployment_Job_Notification_Email_Address_is_set_correctly(self):
+        """
+        Test notification email address is set correctly.
+        """
         expected = "Bob.Ross@thedatashed.co.uk"
-        actual = load_configuration(get_config_text(VALID_CONFIG))
+        actual = load_configuration(toml.dumps(TEST_CONFIG))
         assert actual.job.notification_email_address == expected
 
     def test_SsisDeployment_Number_Job_Steps_is_set_correctly(self):
+        """
+        Test number of job steps is correct.
+        """
         expected = 2
-        actual = load_configuration(get_config_text(VALID_CONFIG))
+        actual = load_configuration(toml.dumps(TEST_CONFIG))
         assert len(actual.job.steps) == expected
 
     def test_SsisDeployment_Job_Steps_are_set_correctly(self):
+        """
+        Test job steps are correct.
+        """
         expected = [
-            Step("todo", "SSIS", "Package1.dtsx"),
-            Step("Paint mountain scene", "SSIS", "PaintRivers.dtsx"),
+            Step("Season 1 Episode 4", "SSIS", "WinterMist.dtsx"),
+            Step("Season 1 Episode 5", "SSIS", "QuietStream.dtsx"),
         ]
-        actual = load_configuration(get_config_text(VALID_CONFIG))
+        actual = load_configuration(toml.dumps(TEST_CONFIG))
         assert actual.job.steps == expected
 
     def test_SsisDeployment_Number_Job_Schedules_is_set_correctly(self):
+        """
+        Test number of job schedules is correct.
+        """
         expected = 2
-        actual = load_configuration(get_config_text(VALID_CONFIG))
+        actual = load_configuration(toml.dumps(TEST_CONFIG))
         assert len(actual.job.schedules) == expected
 
     def test_SsisDeployment_Job_Schedules_are_set_correctly(self):
+        """
+        Test job schedules are set correctly.
+        """
         expected = [
-            Schedule("name1", 12, datetime.time(0, 0)),
-            Schedule("name2", 111, datetime.time(0, 0)),
+            Schedule("Winter Moon", 30, datetime.time(0, 0)),
+            Schedule("Autumn Mountain", 1440, datetime.time(0, 0)),
         ]
-        actual = load_configuration(get_config_text(VALID_CONFIG))
-        print(actual)
+        actual = load_configuration(toml.dumps(TEST_CONFIG))
         assert actual.job.schedules == expected
+
+    def test_SsisDeployment_job_step_count_is_set_correctly(self):
+        """
+        Test the correct number of job steps are set.
+        """
+        expected = 2
+        actual = len(load_configuration(toml.dumps(TEST_CONFIG)).job.steps)
+        assert actual == expected
+
+    def test_SsisDeployment_job_schedule_count_is_set_correctly(self):
+        """
+        Test the correct number of job schedules are set.
+        """
+        expected = 2
+        actual = len(load_configuration(toml.dumps(TEST_CONFIG)).job.schedules)
+        assert actual == expected
+
+    def test_SsisDeployment_parameter_count_is_set_correctly(self):
+        """
+        Test the correct number of parameters are set.
+        """
+        expected = 2
+        actual = len(load_configuration(toml.dumps(TEST_CONFIG)).parameters)
+        assert actual == expected
+
+    def test_SsisDeployment_throws_an_exception_when_project_name_is_not_set(self):
+        """
+        Test project is not optional.
+        """
+        config = copy.deepcopy(TEST_CONFIG)
+        config["project"] = None
+
+        with pytest.raises(ConfigurationError):
+            load_configuration(toml.dumps(config))
+
+    def test_SsisDeployment_throws_an_exception_when_project_is_not_in_config(self):
+        """
+        Test project is not optional.
+        """
+        config = copy.deepcopy(TEST_CONFIG)
+        del config["project"]
+
+        with pytest.raises(ConfigurationError):
+            load_configuration(toml.dumps(config))
+
+    def test_SsisDeployment_throws_an_exception_when_folder_is_not_set(self):
+        """
+        Test folder is not optional.
+        """
+        config = copy.deepcopy(TEST_CONFIG)
+        config["folder"] = None
+
+        with pytest.raises(ConfigurationError):
+            load_configuration(toml.dumps(config))
+
+    def test_SsisDeployment_throws_an_exception_when_folder_is_in_config(self):
+        """
+        Test folder is not optional.
+        """
+        config = copy.deepcopy(TEST_CONFIG)
+        del config["folder"]
+
+        with pytest.raises(ConfigurationError):
+            load_configuration(toml.dumps(config))
+
+    def test_SsisDeployment_environment_is_optional(self):
+        """
+        Test environment is optional.
+        """
+        config = copy.deepcopy(TEST_CONFIG)
+        config["environment"] = None
+
+        assert_type(load_configuration(toml.dumps(config)), SsisDeployment)
+
+    def test_SsisDeployment_does_not_error_when_no_parameters_are_present_in_config(
+        self,
+    ):
+        """
+        Test parameters are optional.
+        """
+        config = copy.deepcopy(TEST_CONFIG)
+        del config["parameters"]
+
+        assert_type(load_configuration(toml.dumps(config)), SsisDeployment)
+
+    def test_SsisDeployment_does_not_error_when_parameters_is_empty(self):
+        """
+        Test parameters are optional.
+        """
+        config = copy.deepcopy(TEST_CONFIG)
+        config["parameters"] = []
+
+        assert_type(load_configuration(toml.dumps(config)), SsisDeployment)
+
+    def test_SsisDeployment_errors_when_job_is_not_present_in_config(self):
+        """
+        Test that job is not optional.
+        """
+        config = copy.deepcopy(TEST_CONFIG)
+        del config["job"]
+
+        with pytest.raises(ConfigurationError):
+            load_configuration(toml.dumps(config))
+
+    def test_SsisDeployment_errors_when_job_name_is_not_set(self):
+        """
+        Test that job name is not optional.
+        """
+        config = copy.deepcopy(TEST_CONFIG)
+        config["job"] = {}
+
+        with pytest.raises(ConfigurationError):
+            load_configuration(toml.dumps(config))
+
+    def test_SsisDeployment_does_not_error_when_job_steps_are_not_present_in_config(
+        self,
+    ):
+        """
+        Test that job steps are optional.
+        """
+        config = copy.deepcopy(TEST_CONFIG)
+        del config["job"]["steps"]
+
+        assert_type(load_configuration(toml.dumps(config)), SsisDeployment)
+
+    def test_SsisDeployment_does_not_error_when_job_steps_is_empty(self):
+        """
+        Test that job steps are optional.
+        """
+        config = copy.deepcopy(TEST_CONFIG)
+        config["job"]["steps"] = []
+
+        assert_type(load_configuration(toml.dumps(config)), SsisDeployment)
+
+    def test_SsisDeployment_does_not_error_when_job_schedules_are_not_present_in_config(
+        self,
+    ):
+        """
+        Test that job schedules are optional.
+        """
+        config = copy.deepcopy(TEST_CONFIG)
+        del config["job"]["schedules"]
+
+        assert_type(load_configuration(toml.dumps(config)), SsisDeployment)
+
+    def test_SsisDeployment_does_not_error_when_job_schedules_is_empty(self):
+        """
+        Test that job schedules are optional.
+        """
+        config = copy.deepcopy(TEST_CONFIG)
+        config["job"]["schedules"] = []
+
+        assert_type(load_configuration(toml.dumps(config)), SsisDeployment)
+
+    @pytest.mark.skip("George needs to implement Pydantic models :)")
+    def test_SsisDeployment_throws_an_exception_when_schedule_minutes_is_not_an_integer(
+        self,
+    ):
+        """
+        Test job schedule interval cannot be anything other than an integer.
+        """
+        config = copy.deepcopy(TEST_CONFIG)
+        config["job"]["schedules"][0][
+            "every_n_minutes"
+        ] = "No mistakes, just happy little accidents"
+
+        with pytest.raises(ConfigurationError):
+            load_configuration(toml.dumps(config))

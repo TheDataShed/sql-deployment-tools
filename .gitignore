@@ -143,3 +143,6 @@ cython_debug/
 #VS Code
 .vscode
 settings.json
+
+# Test results
+test-results/

@@ -55,9 +55,9 @@ class Step:
 @dataclass
 class Job:
     name: str
-    description: str
-    steps: typing.List[Step]
-    schedules: typing.List[Schedule]
+    description: str = ""
+    steps: typing.List[Step] = field(default_factory=list)
+    schedules: typing.List[Schedule] = field(default_factory=list)
     enabled: bool = True
     notification_email_address: typing.Optional[str] = None
 
@@ -67,6 +67,6 @@ class Job:
 class SsisDeployment:
     project: str
     folder: str
-    job: Job
-    parameters: typing.List[Parameter]
+    job: Job = field(default_factory=dict)
+    parameters: typing.List[Parameter] = field(default_factory=list)
     environment: str = "default"
