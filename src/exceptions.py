@@ -1,6 +1,6 @@
-class SqlAgentOperatorException(Exception):
+class SqlAgentOperatorException(Exception):  # pragma: no cover
     pass
 
 
-class ConfigurationError(Exception):
+class ConfigurationError(Exception):  # pragma: no cover
     pass
