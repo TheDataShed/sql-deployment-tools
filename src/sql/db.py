@@ -1,6 +1,5 @@
 import datetime
 import os
-import typing
 
 import pyodbc
 import sqlparams
@@ -17,7 +16,8 @@ class Database:
         self.sqlparams = sqlparams.SQLParams("named_dollar", "qmark")
 
     def _execute_sql(self, query: str, parameters: dict, return_results: bool = False):
-        # Setting nocount on here means that we don't need to pop it in every one of our SQL files
+        # Setting nocount on here means that we don't need to pop it in every one of
+        #  our SQL files
         sql, params = self.sqlparams.format(f"SET NOCOUNT ON; {query}", parameters)
         self.cursor.execute(sql, params)
         if return_results:
@@ -81,17 +81,6 @@ class Database:
                 "environment_name": environment_name,
                 "folder_name": folder_name,
                 "project_name": project_name,
-            },
-        )
-
-    def ssis_remove_all_environment_variables(
-        self, environment_name: str, folder_name: str
-    ):
-        self._execute_sql(
-            query.ssis_remove_all_environment_variables,
-            {
-                "environment_name": environment_name,
-                "folder_name": folder_name,
             },
         )
 
@@ -239,10 +228,11 @@ class Database:
         folder_name: str,
         project_name: str,
     ):
-        # The OPENROWSET statement cannot be parameterised, so we have to use token replacement.
-        # Before we do this, we should do some sanity checking on the input value first...
+        # The OPENROWSET statement cannot be parameterised, so we have to use token
+        # replacement. Before we do this, we should do some sanity checking on the
+        # input value first...
         if not ispac_path.endswith(".ispac"):
-            raise ValueError(f"Not an ISPAC file.")
+            raise ValueError("Not an ISPAC file.")
 
         if not os.path.exists(ispac_path):
             raise FileNotFoundError("Cannot find specific ISPAC file.")

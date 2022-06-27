@@ -1,10 +1,7 @@
 import toml
 
+from src.exceptions import ConfigurationError
 from src.model import SsisDeployment
-
-
-class ConfigurationError(Exception):
-    pass
 
 
 def load_configuration(configuration: str) -> SsisDeployment:

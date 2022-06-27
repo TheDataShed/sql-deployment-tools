@@ -1,7 +1,7 @@
 DECLARE @reference_id bigint;
 
 IF NOT EXISTS (
-  SELECT * 
+  SELECT *
   FROM   SSISDB.internal.environment_references
    INNER
     JOIN SSISDB.internal.projects

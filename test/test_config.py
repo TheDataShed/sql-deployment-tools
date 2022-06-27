@@ -1,14 +1,12 @@
-import os
-import sys
-from json import load
-from test.conftest import *
+from test.conftest import TEST_CONFIG
 
 import pytest
-from pytest import fail
+import toml
 from typing_extensions import assert_type
 
-from src.config import *
-from src.model import *
+from src.config import load_configuration
+from src.exceptions import ConfigurationError
+from src.model import SsisDeployment
 
 
 class TestConfig:

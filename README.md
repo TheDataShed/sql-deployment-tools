@@ -115,7 +115,7 @@ Secrets/tokens can then be injected at deployment time using the
 `--replacement-tokens` argument, e.g.:
 
 ```bash
-ssis-deployment deploy --replacement-tokens '{"SECRET_VALUE": "actual super secret value"}'
+ssis-deployment deploy --replacement-tokens '{"SECRET_VALUE": "***"}'
 ```
 
 ### Example Connection String
