@@ -1,16 +1,21 @@
 import copy
 import datetime
-from cmath import exp
-from json import load
-from test.conftest import *
+from test.conftest import TEST_CONFIG
 
 import pytest
-import this
-from pytest import fail
+import toml
 from typing_extensions import assert_type
 
-from src.config import *
-from src.model import *
+from src.config import load_configuration
+from src.exceptions import ConfigurationError
+from src.model import (
+    FrequencyInterval,
+    FrequencyType,
+    NotifyLevelEmail,
+    Schedule,
+    SsisDeployment,
+    Step,
+)
 
 
 class TestFrequencyType:

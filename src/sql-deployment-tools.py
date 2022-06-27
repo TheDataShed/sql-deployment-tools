@@ -5,7 +5,6 @@ import sys
 
 from src.config import ConfigurationError, load_configuration
 from src.deploy import deploy_ssis
-from src.model import SsisDeployment
 
 if __name__ == "__main__":
     parent_parser = argparse.ArgumentParser(description="SSIS Deployment Helper")
@@ -40,7 +39,10 @@ if __name__ == "__main__":
     deploy.add_argument(
         "--connection-string",
         type=str,
-        help="Connection string. If not supplied we'll attempt to use environment variable `CONNETION_STRING`",
+        help=(
+            "Connection string. If not supplied we'll attempt to use environment"
+            " variable `CONNECTION_STRING`"
+        ),
         required=False,
     )
     deploy.add_argument(
@@ -53,7 +55,7 @@ if __name__ == "__main__":
     args = parent_parser.parse_args()
 
     if not args.config.name.endswith(".toml"):
-        raise ValueError(f"Config must be a TOML file.")
+        raise ValueError("Config must be a TOML file.")
 
     configuration = args.config.read()
     args.config.close()
@@ -66,7 +68,7 @@ if __name__ == "__main__":
     elif args.command == "deploy":
         if args.ispac:
             if not args.ispac.endswith(".ispac"):
-                raise ValueError(f"Not an ISPAC file.")
+                raise ValueError("Not an ISPAC file.")
 
             if not os.path.exists(args.ispac):
                 raise FileNotFoundError("Cannot find specific ISPAC file.")
@@ -74,7 +76,9 @@ if __name__ == "__main__":
         connection_string = args.connection_string or os.getenv("CONNECTION_STRING")
         if not connection_string:
             raise ValueError(
-                "Missing connection string. Can either be supplied using the `--connection-string` argument or via an environment variable `CONNETION_STRING`"
+                "Missing connection string. Can either be supplied using the"
+                " `--connection-string` argument or via an environment variable"
+                " `CONNECTION_STRING`"
             )
 
         if args.replacement_tokens:

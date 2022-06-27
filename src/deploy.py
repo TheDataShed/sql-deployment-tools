@@ -1,5 +1,3 @@
-import toml
-
 from src.exceptions import SqlAgentOperatorException
 from src.model import SsisDeployment
 from src.sql.db import Database

@@ -20,7 +20,7 @@ ELSE
        , @enabled               = $job_enabled -- 1=Enabled
        , @notify_level_eventlog = 2 -- On failure
        , @notify_level_email    = 2 -- On failure
-       , @notify_level_netsend  = 0 -- Never 
+       , @notify_level_netsend  = 0 -- Never
        , @notify_level_page     = 0 -- Never
        , @delete_level          = 0 -- Never
     ;
