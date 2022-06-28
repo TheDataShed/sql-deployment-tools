@@ -1,3 +1,10 @@
+## 0.1.1 (2022-06-28)
+
+### Fix
+
+- Exclude changelog.md from pre-commit (#37)
+- Release builds (#36)
+
 ## 0.1.0 (2022-06-28)
 
 ### Fix
