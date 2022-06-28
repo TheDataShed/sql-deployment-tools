@@ -114,6 +114,7 @@ jobs:
       github.ref == 'refs/heads/main' &&
       github.event_name == 'push'
     runs-on: ubuntu-latest
+    needs: [pre_commit, test, build_debian, build_windows, build_macosx]
     name: "Commitizen: Bump version and create changelog"
     steps:
       - name: Check out
@@ -125,4 +126,3 @@ jobs:
         uses: commitizen-tools/commitizen-action@master
         with:
           github_token: ${{ secrets.COMMITIZEN }}
-          changelog_increment_filename: 'CHANGELOG.md'
