@@ -15,6 +15,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         name: Checkout Repository
+        with:
+          fetch-depth: 0
 
       - name: Build Executable (Debian)
         run: |
@@ -26,11 +28,17 @@ jobs:
           path: dist/debian/sql-deployment-tools
         name: Upload Executable
 
+      - name: 'Get Latest tag'
+        id: previoustag
+        uses: "WyriHaximus/github-action-get-previous-tag@v1"
+        with:
+          fallback: 1.0.0
+
       - name: Release
         uses: softprops/action-gh-release@v1
         with:
           body_path: "CHANGELOG.md"
-          tag_name: ${{ env.REVISION }}
+          tag_name: ${{ steps.previoustag.outputs.tag }}_debian
           files: dist/debian/sql-deployment-tools
         env:
           GITHUB_TOKEN: ${{ secrets.COMMITIZEN }}
