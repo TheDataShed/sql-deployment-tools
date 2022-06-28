@@ -1,12 +1,15 @@
 name: SQL Deployment Tools - Windows
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["SQL Deployment Tools CI"]
+    branches: [main]
+    types:
+      - completed
 
 jobs:
   build:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: windows-latest
 
     steps:
@@ -22,3 +25,12 @@ jobs:
           name: exe
           path: dist/windows/sql-deployment-tools.exe
         name: Upload Executable
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          body_path: "CHANGELOG.md"
+          tag_name: ${{ env.REVISION }}
+          files: dist/windows/sql-deployment-tools.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.COMMITIZEN }}

@@ -107,3 +107,22 @@ jobs:
         run: |
           echo "Validating Mac OSX Build"
           sh ./platform/mac_osx/build.sh
+
+  bump-version:
+    if: >
+      !startsWith(github.event.head_commit.message, 'bump:') &&
+      github.ref == 'refs/heads/main' &&
+      github.event_name == 'push'
+    runs-on: ubuntu-latest
+    name: "Commitizen: Bump version and create changelog"
+    steps:
+      - name: Check out
+        uses: actions/checkout@v2
+        with:
+          token: "${{ secrets.COMMITIZEN }}"
+          fetch-depth: 0
+      - name: Create bump and changelog
+        uses: commitizen-tools/commitizen-action@master
+        with:
+          github_token: ${{ secrets.COMMITIZEN }}
+          changelog_increment_filename: 'CHANGELOG.md'
