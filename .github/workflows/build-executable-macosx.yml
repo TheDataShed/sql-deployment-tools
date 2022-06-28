@@ -38,7 +38,7 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           body_path: "CHANGELOG.md"
-          tag_name: ${{ steps.previoustag.outputs.tag }}
+          tag_name: ${{ steps.previoustag.outputs.tag }}_macosx
           files: dist/macosx/sql-deployment-tools
         env:
           GITHUB_TOKEN: ${{ secrets.COMMITIZEN }}
