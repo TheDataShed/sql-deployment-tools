@@ -125,4 +125,3 @@ jobs:
         uses: commitizen-tools/commitizen-action@master
         with:
           github_token: ${{ secrets.COMMITIZEN }}
-          changelog_increment_filename: 'CHANGELOG.md'
