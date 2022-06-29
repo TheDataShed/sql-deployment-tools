@@ -7,4 +7,6 @@ EXEC msdb.dbo.sp_add_jobstep
    , @subsystem            = $sub_system
    , @command              = $command
    , @database_name        = $database_name
+   , @retry_attempts       = $retry_attempts
+   , @retry_interval       = $retry_interval
 ;

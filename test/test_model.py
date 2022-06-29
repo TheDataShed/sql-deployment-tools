@@ -374,3 +374,48 @@ class TestSsisDeployment:
 
         with pytest.raises(ConfigurationError):
             load_configuration(toml.dumps(config))
+
+    def test_SsisDeployment_throws_exception_step_type_is_ssis_tsql_command_set(
+        self,
+    ):
+        """
+        Test that if job_step type is set to SSIS but a
+        SQL String is provided that the config fails.
+        """
+
+        config = copy.deepcopy(TEST_CONFIG)
+        del config["job"]["steps"][0]["ssis_package"]
+        config["job"]["steps"][0]["tsql_command"] = "SELECT 1 AS n"
+
+        with pytest.raises(ConfigurationError):
+            load_configuration(toml.dumps(config))
+
+    def test_SsisDeployment_throws_exception_step_type_is_tsql_ssis_package_set(
+        self,
+    ):
+        """
+        Test that if job_step type is set to T-SQL
+        but a ssis_package is provided that the config fails.
+        """
+
+        config = copy.deepcopy(TEST_CONFIG)
+        config["job"]["steps"][0]["type"] = "T-SQL"
+
+        with pytest.raises(ConfigurationError):
+            load_configuration(toml.dumps(config))
+
+    def test_SsisDeployment_does_not_throw_exception_step_tsql_command_provided(
+        self,
+    ):
+        """
+        Test that the config is valid when job step
+        is t-sql and tsql_command is provided.
+        """
+
+        config = copy.deepcopy(TEST_CONFIG)
+        config["job"]["steps"][0]["type"] = "T-SQL"
+        del config["job"]["steps"][0]["ssis_package"]
+        config["job"]["steps"][0]["tsql_command"] = "SELECT 1 AS number"
+
+        actual = load_configuration(toml.dumps(config))
+        assert_type(actual, SsisDeployment)

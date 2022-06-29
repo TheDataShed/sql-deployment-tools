@@ -47,10 +47,10 @@ repos:
     hooks:
         - id: darglint
           args: ["--docstring-style", "sphinx"]
-  - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
-    rev: v1.2.4
-    hooks:
-    - id: python-safety-dependencies-check
+  # - repo: https://github.com/Lucas-C/pre-commit-hooks-safety
+  #   rev: v1.2.4
+  #   hooks:
+  #   - id: python-safety-dependencies-check
   - repo: https://github.com/commitizen-tools/commitizen
     rev: v2.27.1
     hooks:

@@ -8,4 +8,6 @@ EXEC msdb.dbo.sp_add_jobstep
    , @command              = $command
    , @database_name        = $database_name
    , @proxy_name           = $proxy_name
+   , @retry_attempts       = $retry_attempts
+   , @retry_interval       = $retry_interval
 ;

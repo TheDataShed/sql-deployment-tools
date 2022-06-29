@@ -90,12 +90,17 @@ enabled = true
 [[job.steps]]
 name = "todo"
 type = "SSIS"
-package = "FormEnrichmentSynchronisationPackage.dtsx"
+ssis_package = "FormEnrichmentSynchronisationPackage.dtsx"
 
 [[job.steps]]
 name = "2"
 type = "SSIS"
-package = "FormEnrichmentSynchronisationPackage.dtsx"
+ssis_package = "FormEnrichmentSynchronisationPackage.dtsx"
+
+[[job.steps]]
+name = "3"
+type = "T-SQL"
+tsql_command = "SELECT TOP 10 * FROM sys.objects"
 
 [[job.schedules]]
 name = "name1"
@@ -104,6 +109,13 @@ every_n_minutes = 12
 [[job.schedules]]
 name = "name2"
 every_n_minutes = 111
+```
+
+Note, when configuring a T-SQL step in an agent job, the default database
+will be `master` and so you should use three part naming in your script like so:
+
+```sql
+SELECT * FROM [Database].[Schema].[Table];
 ```
 
 Note the `{SECRET_VALUE}` token in the above config.
