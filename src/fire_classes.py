@@ -3,17 +3,21 @@ import sys
 
 import fire
 
-from config import ConfigurationError, load_configuration
-from deploy import deploy_ssis
-from model import SsisDeployment
+from src.config import ConfigurationError, load_configuration
+from src.deploy import deploy_ssis
+from src.model import SsisDeployment
 
 
 class run:
     def validate(self, config="config.toml"):
-        configuration = open(config, "r").read()
-        if not self.config.endswith(".toml"):
+        """Validate \n
+        Validate the config file \n
+        --config: TOML configuration file (default: config.toml) \n
+        """
+        if not config.endswith(".toml"):
             raise ValueError(f"Config must be a TOML file.")
 
+        configuration = open(config, "r").read()
         try:
             load_configuration(configuration)
         except ConfigurationError:
