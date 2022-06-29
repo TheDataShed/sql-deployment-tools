@@ -5,6 +5,8 @@ from enum import Enum
 
 from dataclasses_json import config, dataclass_json
 
+from src.exceptions import ConfigurationError
+
 
 class FrequencyType(Enum):
     ONCE = 1
@@ -48,8 +50,17 @@ class Schedule:
 class Step:
     name: str
     _type: str = field(metadata=config(field_name="type"))
-    package: str
+    ssis_package: typing.Optional[str] = None
+    tsql_command: typing.Optional[str] = None
+    retry_attempts: typing.Optional[int] = 0
+    retry_interval: typing.Optional[int] = 0
     proxy: typing.Optional[str] = None
+
+    def __post_init__(self):
+        if self._type == "SSIS" and not self.ssis_package:
+            raise ConfigurationError("'ssis_package must be provided.'")
+        elif self._type == "T-SQL" and not self.tsql_command:
+            raise ConfigurationError("'tsql_command' must be provided.")
 
 
 @dataclass

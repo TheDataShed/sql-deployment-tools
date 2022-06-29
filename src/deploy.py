@@ -33,21 +33,34 @@ def deploy_ssis(
 
     for job_step in ssis_deployment.job.steps:
 
-        if job_step._type != "SSIS":
+        if job_step._type not in ["SSIS", "T-SQL"]:
 
             raise NotImplementedError(
-                "Only job.steps.type==SSIS are currently supported"
+                """Only job.steps.type==SSIS and
+                job.steps.type==T-SQL are currently supported"""
             )
 
-        db.agent_create_job_step_ssis(
-            job_name,
-            job_step.name,
-            folder_name,
-            project_name,
-            job_step.package,
-            environment_name,
-            job_step.proxy,
-        )
+        if job_step._type == "SSIS":
+            db.agent_create_job_step_ssis(
+                job_name,
+                job_step.name,
+                folder_name,
+                project_name,
+                job_step.ssis_package,
+                environment_name,
+                job_step.retry_attempts,
+                job_step.retry_interval,
+                job_step.proxy,
+            )
+
+        if job_step._type == "T-SQL":
+            db.agent_create_job_step_tsql(
+                job_name,
+                job_step.name,
+                job_step.tsql_command,
+                job_step.retry_attempts,
+                job_step.retry_interval,
+            )
 
     for job_schedule in ssis_deployment.job.schedules:
         db.agent_create_job_schedule_occurs_every_n_minutes(

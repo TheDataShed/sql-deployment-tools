@@ -156,8 +156,10 @@ class Database:
         step_name: str,
         folder_name: str,
         project_name: str,
-        package: str,
+        ssis_package: str,
         environment_name: str,
+        retry_attempts: int,
+        retry_interval: int,
         proxy_name: str = None,
     ):
         environment_reference_id = self._execute_sql(
@@ -170,7 +172,7 @@ class Database:
         )[0].environment_reference_id
 
         command = (
-            f"""/ISSERVER "\\"\\SSISDB\\{folder_name}\\{project_name}\\{package}\\"\""""
+            f"""/ISSERVER "\\"\\SSISDB\\{folder_name}\\{project_name}\\{ssis_package}\\"\""""  # noqa
             f""" /SERVER localhost /ENVREFERENCE {environment_reference_id}"""
             """ /Par "\\\"$ServerOption::LOGGING_LEVEL(Int16)\\"\";1"""
             """ /Par "\\\"$ServerOption::SYNCHRONIZED(Boolean)\\"\";True"""
@@ -189,6 +191,8 @@ class Database:
                     "command": command,
                     "database_name": "master",
                     "proxy_name": proxy_name,
+                    "retry_attempts": retry_attempts,
+                    "retry_interval": retry_interval,
                 },
             )
         else:
@@ -200,8 +204,34 @@ class Database:
                     "sub_system": "SSIS",
                     "command": command,
                     "database_name": "master",
+                    "retry_attempts": retry_attempts,
+                    "retry_interval": retry_interval,
                 },
             )
+
+        self._agent_reset_job_step_flow(job_name)
+
+    def agent_create_job_step_tsql(
+        self,
+        job_name: str,
+        step_name: str,
+        tsql_command: str,
+        retry_attempts: int,
+        retry_interval: int,
+    ):
+
+        self._execute_sql(
+            query.agent_create_job_step,
+            {
+                "job_name": job_name,
+                "step_name": step_name,
+                "sub_system": "TSQL",
+                "command": tsql_command,
+                "database_name": "master",
+                "retry_attempts": retry_attempts,
+                "retry_interval": retry_interval,
+            },
+        )
 
         self._agent_reset_job_step_flow(job_name)
 

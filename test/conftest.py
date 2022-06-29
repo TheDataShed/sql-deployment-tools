@@ -19,12 +19,12 @@ TEST_CONFIG = {
             {
                 "name": "Season 1 Episode 4",
                 "type": "SSIS",
-                "package": "WinterMist.dtsx",
+                "ssis_package": "WinterMist.dtsx",
             },
             {
                 "name": "Season 1 Episode 5",
                 "type": "SSIS",
-                "package": "QuietStream.dtsx",
+                "ssis_package": "QuietStream.dtsx",
             },
         ],
         "schedules": [
