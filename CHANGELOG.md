@@ -1,3 +1,9 @@
+## 0.2.0 (2022-06-29)
+
+### Feat
+
+- Added functionality for creating SQL Agent T-SQL job steps (#43)
+
 ## 0.1.1 (2022-06-28)
 
 ### Fix
