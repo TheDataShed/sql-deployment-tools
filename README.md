@@ -37,7 +37,7 @@ Each target SSIS server requires:
    1. `SqlAgentUserRole`
 1. Create proxy user account on the target database
 1. Add a proxy user account as SQL login
-1. Add the proxy user to the `db_datareader` role on the target database
+1. Grant the proxy user the required access permissions on the target database
 
 ## Build
 
@@ -68,12 +68,13 @@ This will create `dist/ssis-deployment.exe`.
 1. TODO: Create agent operator (optional)
 1. TODO: Create notification (optional)
 
-### Example Config for the SSIS solution
+### Example Configuration for the SSIS Solution
+
 To be placed in the SSIS package folder and included in the CI build.
-Optionally, the `ssis-deployment.exe` can be downloaded and used to validate this config file in the pipeline.
+Optionally, the `sql-deployment-tools` executable can be downloaded and used to validate this config file in the pipeline.
 
 ```toml
-project = "Form Enrichment Sync Service"
+project = "My Integration Services Project"
 folder = "def"
 environment = "default"
 
@@ -96,20 +97,19 @@ notification_email_address = "{NotificationEmailAddress}"
 [[job.steps]]
 name = "todo"
 type = "SSIS"
-ssis_package = "FormEnrichmentSynchronisationPackage.dtsx"
+ssis_package = "MyIntegrationServicesProjectLoad.dtsx"
 proxy = "SSISProxy"
 
 [[job.steps]]
 name = "2"
 type = "SSIS"
-ssis_package = "FormEnrichmentSynchronisationPackage.dtsx"
+ssis_package = "MyIntegrationServicesProjectTransform.dtsx"
 proxy = "SSISProxy"
 
 [[job.steps]]
 name = "3"
 type = "T-SQL"
 tsql_command = "SELECT TOP 10 * FROM sys.objects"
-proxy = "SSISProxy"
 
 [[job.schedules]]
 name = "name1"
