@@ -35,6 +35,9 @@ Each target SSIS server requires:
 1. Add the build agent user to the following roles in `msdb`:
    1. `db_datareader`
    1. `SqlAgentUserRole`
+1. Create proxy user account on the target database
+1. Add a proxy user account as SQL login
+1. Grant the proxy user the required access permissions on the target database
 
 ## Build
 
@@ -44,7 +47,7 @@ rm -rf dist/
 ./build.sh
 ```
 
-This will create `dist/ssis-deployment.exe`.
+This will create `dist/sql-deployment-tools.exe`.
 
 ## Deployment Steps
 
@@ -65,10 +68,14 @@ This will create `dist/ssis-deployment.exe`.
 1. TODO: Create agent operator (optional)
 1. TODO: Create notification (optional)
 
-### Example Config
+### Example Configuration for the SSIS Solution
+
+To be placed in the SSIS package folder and included in the CI build.
+Optionally, the `sql-deployment-tools` executable can be downloaded
+and used to validate this config file in the pipeline.
 
 ```toml
-project = "Form Enrichment Sync Service"
+project = "My Integration Services Project"
 folder = "def"
 environment = "default"
 
@@ -86,16 +93,19 @@ sensitive = false
 name = "whatever"
 description = "cool"
 enabled = true
+notification_email_address = "{NotificationEmailAddress}"
 
 [[job.steps]]
 name = "todo"
 type = "SSIS"
-ssis_package = "FormEnrichmentSynchronisationPackage.dtsx"
+ssis_package = "MyIntegrationServicesProjectLoad.dtsx"
+proxy = "SSISProxy"
 
 [[job.steps]]
 name = "2"
 type = "SSIS"
-ssis_package = "FormEnrichmentSynchronisationPackage.dtsx"
+ssis_package = "MyIntegrationServicesProjectTransform.dtsx"
+proxy = "SSISProxy"
 
 [[job.steps]]
 name = "3"
@@ -127,7 +137,7 @@ Secrets/tokens can then be injected at deployment time using the
 `--replacement-tokens` argument, e.g.:
 
 ```bash
-ssis-deployment deploy --replacement-tokens '{"SECRET_VALUE": "***"}'
+sql-deployment-tools deploy --replacement-tokens '{"SECRET_VALUE": "***"}'
 ```
 
 ### Example Connection String
