@@ -47,7 +47,7 @@ rm -rf dist/
 ./build.sh
 ```
 
-This will create `dist/ssis-deployment.exe`.
+This will create `dist/sql-deployment-tools.exe`.
 
 ## Deployment Steps
 
@@ -71,7 +71,8 @@ This will create `dist/ssis-deployment.exe`.
 ### Example Configuration for the SSIS Solution
 
 To be placed in the SSIS package folder and included in the CI build.
-Optionally, the `sql-deployment-tools` executable can be downloaded and used to validate this config file in the pipeline.
+Optionally, the `sql-deployment-tools` executable can be downloaded
+and used to validate this config file in the pipeline.
 
 ```toml
 project = "My Integration Services Project"
@@ -136,7 +137,7 @@ Secrets/tokens can then be injected at deployment time using the
 `--replacement-tokens` argument, e.g.:
 
 ```bash
-ssis-deployment deploy --replacement-tokens '{"SECRET_VALUE": "***"}'
+sql-deployment-tools deploy --replacement-tokens '{"SECRET_VALUE": "***"}'
 ```
 
 ### Example Connection String
