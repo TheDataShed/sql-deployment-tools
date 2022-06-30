@@ -26,7 +26,12 @@ def deploy_ssis(
 
     for parameter in ssis_deployment.parameters:
         db.ssis_create_environment_variable(
-            environment_name, folder_name, project_name, parameter.name, parameter.value
+            environment_name=environment_name,
+            folder_name=folder_name,
+            project_name=project_name,
+            variable_name=parameter.name,
+            variable_value=parameter.value,
+            is_sensitive=parameter.sensitive,
         )
 
     db.agent_create_job(job_name, job_description)

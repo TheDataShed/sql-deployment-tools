@@ -126,7 +126,7 @@ class Database:
 
         if is_sensitive:
             self._execute_sql(
-                query.ssis_create_environment_variable,
+                query.ssis_set_environment_variable_as_sensitive,
                 {
                     "environment_name": environment_name,
                     "folder_name": folder_name,
