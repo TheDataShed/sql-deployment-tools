@@ -1,3 +1,9 @@
+## 0.2.1 (2022-07-01)
+
+### Fix
+
+- SSIS Parameter Sensitivity (#45)
+
 ## 0.2.0 (2022-06-29)
 
 ### Feat
