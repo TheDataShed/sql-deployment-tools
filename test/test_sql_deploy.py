@@ -1,12 +1,13 @@
-import os 
+import os
+from test.conftest import *
+
 import pyodbc
 import pytest
-
 from pytest import fail
 
 from src.config import ConfigurationError
-from test.conftest import *
 from src.sql_deployment_tools import sql_deployment
+
 
 class TestValidate:
     def test_validate_toml(self):
@@ -35,7 +36,9 @@ class TestDeploy:
 
     def test_ispac_file_exists(self):
         with pytest.raises(FileNotFoundError):
-            sql_deployment().deploy(ispac="test/test_ispac.ispac", config="test/test_config.toml")
+            sql_deployment().deploy(
+                ispac="test/test_ispac.ispac", config="test/test_config.toml"
+            )
 
     def test_connection_string(self):
         if not os.getenv("CONNECTION_STRING"):
