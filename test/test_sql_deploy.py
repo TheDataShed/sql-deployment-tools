@@ -40,7 +40,7 @@ class TestDeploy:
                 ispac="test/test_ispac.ispac", config="test/test_config.toml"
             )
 
-    def test_connection_string(self):
+    def test_connection_string_error(self):
 
         if not os.getenv("CONNECTION_STRING"):
             with pytest.raises(ValueError):
@@ -49,10 +49,14 @@ class TestDeploy:
             print("OS connection string available")
 
     def test_connection_string(self):
-        with pytest.raises(ConfigurationError):
+        try:
             sql_deployment().deploy(
                 connection_string="conn_test", config="test/test_config.toml"
             )
+        except KeyError:
+            pytest.fail("KeyError: token not found in config")
+        except pyodbc.InterfaceError:
+            pass
 
     def test_replacement_token(self):
         try:
