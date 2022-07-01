@@ -1,16 +1,12 @@
-import os
-import importlib 
-from test.conftest import *
-
+import os 
 import pyodbc
 import pytest
+
 from pytest import fail
 
 from src.config import ConfigurationError
-# from src.sql_deployment-tools import sql_deployment
-sql_deployment =  __import__("src/sql-deployment-tools")
-
-
+from test.conftest import *
+from src.sql_deployment-tools import sql_deployment
 
 class TestValidate:
     def test_validate_toml(self):
