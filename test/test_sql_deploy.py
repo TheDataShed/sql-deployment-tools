@@ -41,6 +41,7 @@ class TestDeploy:
             )
 
     def test_connection_string(self):
+
         if not os.getenv("CONNECTION_STRING"):
             with pytest.raises(ValueError):
                 sql_deployment().deploy(config="test/test_config.toml")
@@ -49,7 +50,9 @@ class TestDeploy:
 
     def test_connection_string(self):
         with pytest.raises(ConfigurationError):
-            sql_deployment().deploy(connection_string="conn_test")
+            sql_deployment().deploy(
+                connection_string="conn_test", config="test/test_config.toml"
+            )
 
     def test_replacement_token(self):
         try:
