@@ -23,7 +23,7 @@ pip install \
 rm -rf dist/macosx/
 
 # Create the executable!
-PyInstaller ./src/sql-deployment-tools.py \
+PyInstaller ./src/sql_deployment_tools.py \
     --clean \
     --noconfirm \
     --log-level WARN \

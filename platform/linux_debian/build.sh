@@ -11,7 +11,7 @@ rm -rf dist/debian/
 
 # Create the executable!
 pyinstaller \
-    ./src/sql-deployment-tools.py \
+    ./src/sql_deployment_tools.py \
     --clean \
     --noconfirm \
     --log-level WARN \
