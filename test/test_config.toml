@@ -21,13 +21,13 @@ notification_email_address = "email"
 [[job.steps]]
 name = "todo"
 type = "SSIS"
-ssis_package = "MyIntegrationServicesProjectLoad.dtsx"
+package = "MyIntegrationServicesProjectLoad.dtsx"
 proxy = "SSISProxy"
 
 [[job.steps]]
 name = "2"
 type = "SSIS"
-ssis_package = "MyIntegrationServicesProjectTransform.dtsx"
+package = "MyIntegrationServicesProjectTransform.dtsx"
 proxy = "SSISProxy"
 
 

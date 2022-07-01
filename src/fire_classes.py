@@ -39,6 +39,9 @@ class run:
         """
 
         configuration = open(config, "r").read()
+
+        load_configuration(configuration)
+
         if ispac:
             if not ispac.endswith(".ispac"):
                 raise ValueError(f"Not an ISPAC file.")
@@ -53,7 +56,9 @@ class run:
             )
 
         if replacement_token:
+            config_temp = configuration
             configuration = configuration.format(**replacement_token)
+            assert configuration != config_temp
 
         ssis_deployment = load_configuration(configuration)
         deploy_ssis(connection_string, ispac, ssis_deployment)
