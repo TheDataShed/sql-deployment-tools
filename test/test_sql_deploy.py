@@ -6,7 +6,7 @@ from pytest import fail
 
 from src.config import ConfigurationError
 from test.conftest import *
-from src.sql_deployment-tools import sql_deployment
+from src.sql_deployment_tools import sql_deployment
 
 class TestValidate:
     def test_validate_toml(self):
