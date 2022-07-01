@@ -1,4 +1,5 @@
 import os
+import importlib 
 from test.conftest import *
 
 import pyodbc
@@ -6,7 +7,9 @@ import pytest
 from pytest import fail
 
 from src.config import ConfigurationError
-from src.sql_deployment_tools_fire import sql_deployment
+# from src.sql_deployment-tools import sql_deployment
+sql_deployment =  __import__("src/sql-deployment-tools")
+
 
 
 class TestValidate:
