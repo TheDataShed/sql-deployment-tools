@@ -5,10 +5,9 @@ import fire
 
 from src.config import ConfigurationError, load_configuration
 from src.deploy import deploy_ssis
-from src.model import SsisDeployment
 
 
-class run:
+class sql_deployment:
     def validate(self, config="config.toml"):
         """Validate \n
         Validate the config file \n
@@ -65,4 +64,4 @@ class run:
 
 
 if __name__ == "__main__":
-    fire.Fire(run)
+    fire.Fire(sql_deployment)
