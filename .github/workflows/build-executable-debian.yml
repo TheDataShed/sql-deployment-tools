@@ -22,5 +22,5 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: exe
-          path: dist/debian/sql-deployment-tools
+          path: dist/debian/sql_deployment_tools
         name: Upload Executable

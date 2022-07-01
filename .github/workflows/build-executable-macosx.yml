@@ -22,5 +22,5 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: exe
-          path: dist/macosx/sql-deployment-tools
+          path: dist/macosx/sql_deployment_tools
         name: Upload Executable

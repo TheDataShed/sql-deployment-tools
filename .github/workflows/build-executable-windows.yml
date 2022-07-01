@@ -22,5 +22,5 @@ jobs:
       - uses: actions/upload-artifact@v3
         with:
           name: exe
-          path: dist/windows/sql-deployment-tools.exe
+          path: dist/windows/sql_deployment_tools.exe
         name: Upload Executable
