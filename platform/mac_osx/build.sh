@@ -33,4 +33,4 @@ PyInstaller ./src/sql_deployment_tools.py \
     --distpath="dist/macosx"
 
 # Run the app to check it has at least built!
-./dist/macosx/sql-deployment-tools --help
+./dist/macosx/sql_deployment_tools --help

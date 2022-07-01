@@ -21,4 +21,4 @@ pyinstaller \
     --distpath="dist/debian"
 
 # Run the app to check it has at least built!
-./dist/debian/sql-deployment-tools --help
+./dist/debian/sql_deployment_tools --help
