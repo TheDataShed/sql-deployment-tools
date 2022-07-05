@@ -5,7 +5,7 @@ import typing
 import pyodbc
 import sqlparams
 
-from sql import query
+import src.sql as sql
 from src.exceptions import SqlAgentOperatorException
 from src.model import NotifyLevelEmail
 
@@ -25,7 +25,7 @@ class Database:
 
     def _agent_reset_job_step_flow(self, job_name: str):
         self._execute_sql(
-            query.agent_reset_job_step_flow,
+            sql.query.agent_reset_job_step_flow,
             {
                 "job_name": job_name,
             },
@@ -33,7 +33,7 @@ class Database:
 
     def _agent_remove_job_alerts(self, job_name: str):
         self._execute_sql(
-            query.agent_remove_all_alerts,
+            sql.query.agent_remove_all_alerts,
             {
                 "job_name": job_name,
             },
@@ -41,7 +41,7 @@ class Database:
 
     def _agent_remove_job_schedules(self, job_name: str):
         self._execute_sql(
-            query.agent_remove_all_schedules,
+            sql.query.agent_remove_all_schedules,
             {
                 "job_name": job_name,
             },
@@ -49,7 +49,7 @@ class Database:
 
     def _agent_remove_job_steps(self, job_name: str):
         self._execute_sql(
-            query.agent_remove_all_steps,
+            sql.query.agent_remove_all_steps,
             {
                 "job_name": job_name,
             },
@@ -57,7 +57,7 @@ class Database:
 
     def ssis_create_folder(self, folder_name: str):
         self._execute_sql(
-            query.ssis_create_folder,
+            sql.query.ssis_create_folder,
             {
                 "folder_name": folder_name,
             },
@@ -65,7 +65,7 @@ class Database:
 
     def ssis_create_environment(self, environment_name: str, folder_name: str):
         self._execute_sql(
-            query.ssis_create_environment,
+            sql.query.ssis_create_environment,
             {
                 "environment_name": environment_name,
                 "folder_name": folder_name,
@@ -76,7 +76,7 @@ class Database:
         self, environment_name: str, folder_name: str, project_name: str
     ):
         self._execute_sql(
-            query.ssis_create_environment_reference,
+            sql.query.ssis_create_environment_reference,
             {
                 "environment_name": environment_name,
                 "folder_name": folder_name,
@@ -88,7 +88,7 @@ class Database:
         self, environment_name: str, folder_name: str
     ):
         self._execute_sql(
-            query.ssis_remove_all_environment_variables,
+            sql.query.ssis_remove_all_environment_variables,
             {
                 "environment_name": environment_name,
                 "folder_name": folder_name,
@@ -99,7 +99,7 @@ class Database:
         self, environment_name: str, folder_name: str
     ):
         self._execute_sql(
-            query.ssis_remove_all_environment_variables,
+            sql.query.ssis_remove_all_environment_variables,
             {
                 "environment_name": environment_name,
                 "folder_name": folder_name,
@@ -116,7 +116,7 @@ class Database:
         is_sensitive: bool = False,
     ):
         self._execute_sql(
-            query.ssis_create_environment_variable,
+            sql.query.ssis_create_environment_variable,
             {
                 "environment_name": environment_name,
                 "folder_name": folder_name,
@@ -126,7 +126,7 @@ class Database:
         )
 
         self._execute_sql(
-            query.ssis_set_environment_reference_to_variable,
+            sql.query.ssis_set_environment_reference_to_variable,
             {
                 "environment_name": environment_name,
                 "folder_name": folder_name,
@@ -137,7 +137,7 @@ class Database:
 
         if is_sensitive:
             self._execute_sql(
-                query.ssis_create_environment_variable,
+                sql.query.ssis_create_environment_variable,
                 {
                     "environment_name": environment_name,
                     "folder_name": folder_name,
@@ -149,7 +149,7 @@ class Database:
         self, job_name: str, job_description: str, enabled: bool = True
     ):
         self._execute_sql(
-            query.agent_create_job,
+            sql.query.agent_create_job,
             {
                 "job_name": job_name,
                 "job_description": job_description,
@@ -172,7 +172,7 @@ class Database:
         proxy_name: str = None,
     ):
         environment_reference_id = self._execute_sql(
-            query.ssis_get_environment_reference_id,
+            sql.query.ssis_get_environment_reference_id,
             {
                 "project_name": project_name,
                 "environment_name": environment_name,
@@ -192,7 +192,7 @@ class Database:
 
         if proxy_name:
             self._execute_sql(
-                query.agent_create_job_step_using_proxy,
+                sql.query.agent_create_job_step_using_proxy,
                 {
                     "job_name": job_name,
                     "step_name": step_name,
@@ -204,7 +204,7 @@ class Database:
             )
         else:
             self._execute_sql(
-                query.agent_create_job_step,
+                sql.query.agent_create_job_step,
                 {
                     "job_name": job_name,
                     "step_name": step_name,
@@ -224,7 +224,7 @@ class Database:
         start_time: datetime.time,
     ):
         self._execute_sql(
-            query.agent_create_job_schedule,
+            sql.query.agent_create_job_schedule,
             {
                 "job_name": job_name,
                 "schedule_name": schedule_name,
@@ -247,7 +247,7 @@ class Database:
         if not os.path.exists(ispac_path):
             raise FileNotFoundError("Cannot find specific ISPAC file.")
 
-        sql = query.ssis_install_ispac.format(ispac_path=ispac_path)
+        sql = sql.query.ssis_install_ispac.format(ispac_path=ispac_path)
         self._execute_sql(
             sql,
             {
@@ -261,7 +261,7 @@ class Database:
             operator_name = email_address
 
         error_message = self._execute_sql(
-            query.agent_create_operator,
+            sql.query.agent_create_operator,
             {
                 "email_address": email_address,
                 "operator_name": operator_name,
@@ -279,7 +279,7 @@ class Database:
         notify_level_email: int = NotifyLevelEmail.ON_FAILURE.value,
     ):
         error_message = self._execute_sql(
-            query.agent_create_notification,
+            sql.query.agent_create_notification,
             {
                 "job_name": job_name,
                 "operator_name": operator_name,

@@ -17,7 +17,7 @@ pyinstaller \
     --log-level WARN \
     --onefile \
     --console \
-    --add-data "./src/sql:sql" \
+    --add-data "./src/sql" \
     --distpath="dist/debian"
 
 # Run the app to check it has at least built!
