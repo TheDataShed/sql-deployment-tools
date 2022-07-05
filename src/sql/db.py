@@ -5,7 +5,7 @@ import typing
 import pyodbc
 import sqlparams
 
-import sql
+import src.sql as sql
 from src.exceptions import SqlAgentOperatorException
 from src.model import NotifyLevelEmail
 
