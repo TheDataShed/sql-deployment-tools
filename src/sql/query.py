@@ -11,7 +11,11 @@ def get_sql(filename: str) -> str:
     :return: raw contents of a SQL file
     :rtype: str
     """
-    with open(pathlib.Path(__file__).resolve().parent.joinpath(filename)) as i:
+    path = str(pathlib.Path(__file__).resolve().parent.joinpath(filename)).replace(
+        "/src", ""
+    )
+
+    with open(path) as i:
         return i.read()
 
 
