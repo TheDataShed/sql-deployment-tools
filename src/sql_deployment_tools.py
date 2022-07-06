@@ -3,8 +3,8 @@ import sys
 
 import fire
 
-from src.config import ConfigurationError, load_configuration
-from src.deploy import deploy_ssis
+from config import ConfigurationError, load_configuration
+from deploy import deploy_ssis
 
 
 class sql_deployment:
