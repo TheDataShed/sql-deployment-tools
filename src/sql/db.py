@@ -5,9 +5,9 @@ import typing
 import pyodbc
 import sqlparams
 
-import src.sql as sql
-from src.exceptions import SqlAgentOperatorException
-from src.model import NotifyLevelEmail
+import sql as sql
+from exceptions import SqlAgentOperatorException
+from model import NotifyLevelEmail
 
 
 class Database:
