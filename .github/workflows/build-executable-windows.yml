@@ -1,7 +1,7 @@
 name: SQL Deployment Tools - Windows
 
 concurrency:
-  group: release
+  group: release-windows
   cancel-in-progress: true
 
 on:
