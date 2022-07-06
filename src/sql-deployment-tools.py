@@ -4,7 +4,7 @@ import os
 import sys
 
 from src.config import ConfigurationError, load_configuration
-from src.deploy import deploy_ssis
+from src.deploy import deploy_agent_job, deploy_ssis
 
 if __name__ == "__main__":
     parent_parser = argparse.ArgumentParser(description="SSIS Deployment Helper")
@@ -85,7 +85,12 @@ if __name__ == "__main__":
             configuration = configuration.format(**args.replacement_tokens)
 
         ssis_deployment = load_configuration(configuration)
-        deploy_ssis(connection_string, args.ispac, ssis_deployment)
+
+        if args.ispac:
+            deploy_ssis(connection_string, args.ispac, ssis_deployment)
+
+        if ssis_deployment.job is not None:
+            deploy_agent_job(connection_string, ssis_deployment)
 
     else:
         raise NotImplementedError(f"Command not supported: {args.command}")

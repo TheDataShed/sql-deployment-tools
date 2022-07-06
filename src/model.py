@@ -76,8 +76,8 @@ class Job:
 @dataclass_json
 @dataclass
 class SsisDeployment:
-    project: str
-    folder: str
+    project: typing.Optional[str] = None
+    folder: typing.Optional[str] = None
     job: Job = field(default_factory=dict)
     parameters: typing.List[Parameter] = field(default_factory=list)
     environment: str = "default"

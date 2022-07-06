@@ -231,45 +231,45 @@ class TestSsisDeployment:
         actual = len(load_configuration(toml.dumps(TEST_CONFIG)).parameters)
         assert actual == expected
 
-    def test_SsisDeployment_throws_an_exception_when_project_name_is_not_set(self):
+    def test_SsisDeployment_throws_no_exception_when_project_name_is_not_set(self):
         """
-        Test project is not optional.
+        Test project is optional.
         """
         config = copy.deepcopy(TEST_CONFIG)
         config["project"] = None
 
-        with pytest.raises(ConfigurationError):
-            load_configuration(toml.dumps(config))
+        actual = load_configuration(toml.dumps(config))
+        assert_type(actual, SsisDeployment)
 
-    def test_SsisDeployment_throws_an_exception_when_project_is_not_in_config(self):
+    def test_SsisDeployment_throws_no_exception_when_project_is_not_in_config(self):
         """
-        Test project is not optional.
+        Test project is optional.
         """
         config = copy.deepcopy(TEST_CONFIG)
         del config["project"]
 
-        with pytest.raises(ConfigurationError):
-            load_configuration(toml.dumps(config))
+        actual = load_configuration(toml.dumps(config))
+        assert_type(actual, SsisDeployment)
 
-    def test_SsisDeployment_throws_an_exception_when_folder_is_not_set(self):
+    def test_SsisDeployment_throws_no_exception_when_folder_is_not_set(self):
         """
-        Test folder is not optional.
+        Test folder is optional.
         """
         config = copy.deepcopy(TEST_CONFIG)
         config["folder"] = None
 
-        with pytest.raises(ConfigurationError):
-            load_configuration(toml.dumps(config))
+        actual = load_configuration(toml.dumps(config))
+        assert_type(actual, SsisDeployment)
 
-    def test_SsisDeployment_throws_an_exception_when_folder_is_in_config(self):
+    def test_SsisDeployment_throws_no_exception_when_folder_is_in_config(self):
         """
         Test folder is not optional.
         """
         config = copy.deepcopy(TEST_CONFIG)
         del config["folder"]
 
-        with pytest.raises(ConfigurationError):
-            load_configuration(toml.dumps(config))
+        actual = load_configuration(toml.dumps(config))
+        assert_type(actual, SsisDeployment)
 
     def test_SsisDeployment_environment_is_optional(self):
         """

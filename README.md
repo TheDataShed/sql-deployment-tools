@@ -140,6 +140,54 @@ Secrets/tokens can then be injected at deployment time using the
 sql-deployment-tools deploy --replacement-tokens '{"SECRET_VALUE": "***"}'
 ```
 
+### Deploy a SQL Agent Job ONLY
+
+You don't always have to provide an *.ispac file to use this tool.
+You can use this tool to deploy an agent job on its own.
+
+#### Example configuration for an Agent Only Solution
+
+```toml
+# Required only if any of your job steps point to SSIS Packages
+project = "My Integration Services Project"
+
+# Required only if any of your job steps point to SSIS Packages
+folder = "def"
+
+# Required only if any of your job steps point to SSIS Packages
+environment = "default"
+
+[job]
+name = "whatever"
+description = "cool"
+enabled = true
+notification_email_address = "{NotificationEmailAddress}"
+
+[[job.steps]]
+name = "todo"
+type = "T-SQL"
+tsql_command = "UPDATE foo SET bar = 'foobar'"
+
+[[job.steps]]
+name = "2"
+type = "T-SQL"
+tsql_command = "SELECT TOP 10 * FROM sys.objects"
+
+[[job.schedules]]
+name = "name1"
+every_n_minutes = 12
+
+[[job.schedules]]
+name = "name2"
+every_n_minutes = 111
+```
+
+Then run the following command:
+
+```bash
+sql-deployment-tools deploy --replacement-tokens '{"SECRET_VALUE": "***"}'
+```
+
 ### Example Connection String
 
 ```text

@@ -11,8 +11,6 @@ def deploy_ssis(
     project_name = ssis_deployment.project
     folder_name = ssis_deployment.folder
     environment_name = ssis_deployment.environment
-    job_name = ssis_deployment.job.name
-    job_description = ssis_deployment.job.description
 
     db.ssis_create_folder(folder_name)
 
@@ -34,9 +32,20 @@ def deploy_ssis(
             is_sensitive=parameter.sensitive,
         )
 
+
+def deploy_agent_job(connection_string: str, agent_deployment: SsisDeployment):
+
+    db = Database(connection_string)
+
+    job_name = agent_deployment.job.name
+    job_description = agent_deployment.job.description
+    folder_name = agent_deployment.folder if agent_deployment.folder else None
+    project_name = agent_deployment.project if agent_deployment.project else None
+    environment = agent_deployment.environment if agent_deployment.environment else None
+
     db.agent_create_job(job_name, job_description)
 
-    for job_step in ssis_deployment.job.steps:
+    for job_step in agent_deployment.job.steps:
 
         if job_step._type not in ["SSIS", "T-SQL"]:
 
@@ -52,7 +61,7 @@ def deploy_ssis(
                 folder_name,
                 project_name,
                 job_step.ssis_package,
-                environment_name,
+                environment,
                 job_step.retry_attempts,
                 job_step.retry_interval,
                 job_step.proxy,
@@ -67,7 +76,7 @@ def deploy_ssis(
                 job_step.retry_interval,
             )
 
-    for job_schedule in ssis_deployment.job.schedules:
+    for job_schedule in agent_deployment.job.schedules:
         db.agent_create_job_schedule_occurs_every_n_minutes(
             job_name,
             job_schedule.name,
@@ -75,16 +84,16 @@ def deploy_ssis(
             job_schedule.start_time,
         )
 
-    if ssis_deployment.job.notification_email_address:
+    if agent_deployment.job.notification_email_address:
         try:
-            db.agent_create_operator(ssis_deployment.job.notification_email_address)
+            db.agent_create_operator(agent_deployment.job.notification_email_address)
         except SqlAgentOperatorException as ex:
             # TODO: log a warning properly, not just print the message
             print(ex)
 
         try:
             db.agent_create_notification(
-                job_name, ssis_deployment.job.notification_email_address
+                job_name, agent_deployment.job.notification_email_address
             )
         except SqlAgentOperatorException as ex:
             # TODO: log a warning properly, not just print the message
