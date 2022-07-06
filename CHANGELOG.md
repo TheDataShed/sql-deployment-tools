@@ -1,3 +1,15 @@
+## 0.3.0 (2022-07-06)
+
+### Fix
+
+- Commitizen bump version condition (#52)
+- Re-Introduce `safety` to Pre-Commit (#47)
+
+### Feat
+
+- Refining CI Run triggers (#51)
+- Changes to github workflows (#50)
+
 ## 0.2.1 (2022-07-01)
 
 ### Fix
