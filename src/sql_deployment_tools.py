@@ -3,7 +3,8 @@ import sys
 
 import fire
 
-from config import ConfigurationError, load_configuration
+from config import load_configuration
+from exceptions import ConfigurationError
 from deploy import deploy_ssis
 
 

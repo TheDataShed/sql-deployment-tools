@@ -6,9 +6,9 @@ import pytest
 import toml
 from typing_extensions import assert_type
 
-from src.config import load_configuration
-from src.exceptions import ConfigurationError
-from src.model import (
+from config import load_configuration
+from exceptions import ConfigurationError
+from model import (
     FrequencyInterval,
     FrequencyType,
     NotifyLevelEmail,
@@ -183,6 +183,7 @@ class TestSsisDeployment:
         """
         expected = [
             Step("Season 1 Episode 4", "SSIS", "WinterMist.dtsx"),
+
             Step("Season 1 Episode 5", "SSIS", "QuietStream.dtsx"),
         ]
         actual = load_configuration(toml.dumps(TEST_CONFIG))
@@ -238,7 +239,7 @@ class TestSsisDeployment:
         config = copy.deepcopy(TEST_CONFIG)
         config["project"] = None
 
-        with pytest.raises(ConfigurationError):
+        with pytest.raises(Exception):
             load_configuration(toml.dumps(config))
 
     def test_SsisDeployment_throws_an_exception_when_project_is_not_in_config(self):
@@ -248,7 +249,7 @@ class TestSsisDeployment:
         config = copy.deepcopy(TEST_CONFIG)
         del config["project"]
 
-        with pytest.raises(ConfigurationError):
+        with pytest.raises(Exception):
             load_configuration(toml.dumps(config))
 
     def test_SsisDeployment_throws_an_exception_when_folder_is_not_set(self):
@@ -258,7 +259,7 @@ class TestSsisDeployment:
         config = copy.deepcopy(TEST_CONFIG)
         config["folder"] = None
 
-        with pytest.raises(ConfigurationError):
+        with pytest.raises(Exception):
             load_configuration(toml.dumps(config))
 
     def test_SsisDeployment_throws_an_exception_when_folder_is_in_config(self):
@@ -268,7 +269,7 @@ class TestSsisDeployment:
         config = copy.deepcopy(TEST_CONFIG)
         del config["folder"]
 
-        with pytest.raises(ConfigurationError):
+        with pytest.raises(Exception):
             load_configuration(toml.dumps(config))
 
     def test_SsisDeployment_environment_is_optional(self):
@@ -307,7 +308,7 @@ class TestSsisDeployment:
         config = copy.deepcopy(TEST_CONFIG)
         del config["job"]
 
-        with pytest.raises(ConfigurationError):
+        with pytest.raises(Exception):
             load_configuration(toml.dumps(config))
 
     def test_SsisDeployment_errors_when_job_name_is_not_set(self):
@@ -317,7 +318,7 @@ class TestSsisDeployment:
         config = copy.deepcopy(TEST_CONFIG)
         config["job"] = {}
 
-        with pytest.raises(ConfigurationError):
+        with pytest.raises(Exception):
             load_configuration(toml.dumps(config))
 
     def test_SsisDeployment_does_not_error_when_job_steps_are_not_present_in_config(
@@ -372,7 +373,7 @@ class TestSsisDeployment:
             "every_n_minutes"
         ] = "No mistakes, just happy little accidents"
 
-        with pytest.raises(ConfigurationError):
+        with pytest.raises(Exception):
             load_configuration(toml.dumps(config))
 
     def test_SsisDeployment_throws_exception_step_type_is_ssis_tsql_command_set(
@@ -387,7 +388,7 @@ class TestSsisDeployment:
         del config["job"]["steps"][0]["ssis_package"]
         config["job"]["steps"][0]["tsql_command"] = "SELECT 1 AS n"
 
-        with pytest.raises(ConfigurationError):
+        with pytest.raises(Exception):
             load_configuration(toml.dumps(config))
 
     def test_SsisDeployment_throws_exception_step_type_is_tsql_ssis_package_set(
@@ -401,7 +402,7 @@ class TestSsisDeployment:
         config = copy.deepcopy(TEST_CONFIG)
         config["job"]["steps"][0]["type"] = "T-SQL"
 
-        with pytest.raises(ConfigurationError):
+        with pytest.raises(Exception):
             load_configuration(toml.dumps(config))
 
     def test_SsisDeployment_does_not_throw_exception_step_tsql_command_provided(

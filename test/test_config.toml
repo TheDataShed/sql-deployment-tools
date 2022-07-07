@@ -1,0 +1,40 @@
+project = "My Integration Services Project"
+folder = "def"
+environment = "default"
+
+[[parameters]]
+name = "name1"
+value = "value"
+sensitive = true
+
+[[parameters]]
+name = "name2"
+value = "value2"
+sensitive = false
+
+[job]
+name = "whatever"
+description = "cool"
+enabled = true
+notification_email_address = "email"
+
+[[job.steps]]
+name = "todo"
+type = "SSIS"
+ssis_package = "MyIntegrationServicesProjectLoad.dtsx"
+proxy = "SSISProxy"
+
+[[job.steps]]
+name = "2"
+type = "SSIS"
+ssis_package = "MyIntegrationServicesProjectTransform.dtsx"
+proxy = "SSISProxy"
+
+
+[[job.schedules]]
+name = "name1"
+every_n_minutes = 12
+
+[[job.schedules]]
+name = "name2"
+every_n_minutes = 111

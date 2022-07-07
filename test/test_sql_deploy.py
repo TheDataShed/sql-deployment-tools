@@ -5,8 +5,8 @@ import pyodbc
 import pytest
 from pytest import fail
 
-from src.config import ConfigurationError
-from src.sql_deployment_tools import sql_deployment
+from exceptions import ConfigurationError
+from sql_deployment_tools import sql_deployment
 
 
 class TestValidate:
