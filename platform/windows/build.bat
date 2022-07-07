@@ -15,6 +15,7 @@ pyinstaller ^
     --onefile ^
     --console ^
     --add-data="src\sql\;sql"
+    --paths="src" ^
 
 :: Run the app to check it has at least built!
 .\dist\windows\sql_deployment_tools --help
