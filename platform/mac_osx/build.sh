@@ -23,7 +23,7 @@ pip install \
 rm -rf dist/macosx/
 
 # Create the executable!
-PyInstaller ./src/sql-deployment-tools.py \
+PyInstaller ./src/sql_deployment_tools.py \
     --clean \
     --noconfirm \
     --log-level WARN \
@@ -33,4 +33,4 @@ PyInstaller ./src/sql-deployment-tools.py \
     --distpath="dist/macosx"
 
 # Run the app to check it has at least built!
-./dist/macosx/sql-deployment-tools --help
+./dist/macosx/sql_deployment_tools --help

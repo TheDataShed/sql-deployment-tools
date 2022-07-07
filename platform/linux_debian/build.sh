@@ -11,7 +11,7 @@ rm -rf dist/debian/
 
 # Create the executable!
 pyinstaller \
-    ./src/sql-deployment-tools.py \
+    ./src/sql_deployment_tools.py \
     --clean \
     --noconfirm \
     --log-level WARN \
@@ -21,4 +21,4 @@ pyinstaller \
     --distpath="dist/debian"
 
 # Run the app to check it has at least built!
-./dist/debian/sql-deployment-tools --help
+./dist/debian/sql_deployment_tools --help
