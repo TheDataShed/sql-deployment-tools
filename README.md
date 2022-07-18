@@ -114,11 +114,11 @@ tsql_command = "SELECT TOP 10 * FROM sys.objects"
 
 [[job.schedules]]
 name = "name1"
-every_n_minutes = 12
+every_n_units = 12
 
 [[job.schedules]]
 name = "name2"
-every_n_minutes = 111
+every_n_units = 111
 ```
 
 Note, when configuring a T-SQL step in an agent job, the default database

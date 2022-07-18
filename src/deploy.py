@@ -68,11 +68,11 @@ def deploy_ssis(
             )
 
     for job_schedule in ssis_deployment.job.schedules:
-        db.agent_create_job_schedule_occurs_every_n_minutes(
+        db.agent_create_job_schedule_occurs_every_n_units(
             job_name,
             job_schedule.name,
-            job_schedule.every_n_minutes,
-            job_schedule.start_time,
+            job_schedule.every_n_unit,
+            job_schedule.schedule_time,
         )
 
     if ssis_deployment.job.notification_email_address:

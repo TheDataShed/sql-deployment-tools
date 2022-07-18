@@ -235,22 +235,24 @@ class Database:
 
         self._agent_reset_job_step_flow(job_name)
 
-    def agent_create_job_schedule_occurs_every_n_minutes(
+    def agent_create_job_schedule_occurs_every_n_units(
         self,
         job_name: str,
         schedule_name: str,
-        every_n_minutes: int,
-        start_time: datetime.time,
+        unit: str,
+        every_n_units: int,
+        schedule_time: str,
     ):
         self._execute_sql(
             query.agent_create_job_schedule,
             {
                 "job_name": job_name,
                 "schedule_name": schedule_name,
-                "occurs_every_n_minutes": every_n_minutes,
-                "hh_mm_ss": start_time.strftime("%H%M%S"),
+                "frequency_subday_type": UnitTypeFrequencyInterval[unit].value,
+                "every_n_units": every_n_units,
+                "hh_mm_ss": schedule_time
             },
-        )
+        )    
 
     def ssis_install_ispac(
         self,

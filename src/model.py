@@ -28,6 +28,15 @@ class NotifyLevelEmail(Enum):
     ALWAYS = 3
 
 
+class UnitTypeFrequencyType(Enum):
+    MINUTE = 4
+    DAY = 4
+
+class UnitTypeFrequencyInterval(Enum):
+    MINUTE = 1
+    DAY = 4
+
+
 @dataclass
 class Parameter:
     name: str
@@ -39,11 +48,9 @@ class Parameter:
 @dataclass
 class Schedule:
     name: str
-    every_n_minutes: int
-    start_time: datetime.time = field(
-        default=datetime.time(hour=0, minute=0, second=0),
-        metadata=config(decoder=datetime.time.fromisoformat),
-    )
+    unit: str
+    every_n_units: int
+    schedule_time: str = "000000"
 
 
 @dataclass

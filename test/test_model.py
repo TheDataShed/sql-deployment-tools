@@ -369,7 +369,7 @@ class TestSsisDeployment:
         """
         config = copy.deepcopy(TEST_CONFIG)
         config["job"]["schedules"][0][
-            "every_n_minutes"
+            "every_n_units"
         ] = "No mistakes, just happy little accidents"
 
         with pytest.raises(ConfigurationError):
