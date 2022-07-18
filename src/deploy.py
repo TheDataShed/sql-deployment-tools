@@ -71,6 +71,7 @@ def deploy_ssis(
         db.agent_create_job_schedule_occurs_every_n_units(
             job_name,
             job_schedule.name,
+            job_schedule.unit,
             job_schedule.every_n_unit,
             job_schedule.schedule_time,
         )

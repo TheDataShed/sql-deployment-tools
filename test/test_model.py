@@ -51,6 +51,40 @@ class TestFrequencyType:
 
         assert FrequencyType.MONTHLY.value == expected
 
+class TestUnitTypeFrequencyType:
+    def test_UnitTypeFrequencyType_MINUTE_equals_4(self):
+        """
+        Test that UnitTypeFrequencyType.MINUTE = 4
+        """
+        expected = 4
+
+        assert UnitTypeFrequencyType.MINUTE.value == expected
+
+    def test_UnitTypeFrequencyType_DAILY_equals_4(self):
+        """
+        Test that UnitTypeFrequencyType.DAILY = 4
+        """
+        expected = 4
+
+        assert UnitTypeFrequencyType.DAILY.value == expected
+
+class TestUnitTypeFrequencyInterval:
+    def test_UnitTypeFrequencyInterval_MINUTE_equals_1(self):
+        """
+        Test that UnitTypeFrequencyInterval.MINUTE = 1
+        """
+        expected = 1
+
+        assert UnitTypeFrequencyInterval.MINUTE.value == expected
+
+    def test_UnitTypeFrequencyInterval_DAY_equals_4(self):
+        """
+        Test that UnitTypeFrequencyType.DAILY = 4
+        """
+        expected = 4
+
+        assert UnitTypeFrequencyInterval.DAY.value == expected
+
 
 class TestFrequencyInterval:
     def test_FrequencyInterval_ONCE_equals_1(self):
@@ -201,8 +235,8 @@ class TestSsisDeployment:
         Test job schedules are set correctly.
         """
         expected = [
-            Schedule("Winter Moon", 30, datetime.time(0, 0)),
-            Schedule("Autumn Mountain", 1440, datetime.time(0, 0)),
+            Schedule("Winter Moon", "DAY", 30, 200000),
+            Schedule("Autumn Mountain", "MINUTE", 1440, 000000),
         ]
         actual = load_configuration(toml.dumps(TEST_CONFIG))
         assert actual.job.schedules == expected
