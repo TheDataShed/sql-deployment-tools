@@ -11,6 +11,8 @@ from src.exceptions import ConfigurationError
 from src.model import (
     FrequencyInterval,
     FrequencyType,
+    DayOfWeekFrequencyInterval,
+    UnitTypeFrequencyType,
     NotifyLevelEmail,
     Schedule,
     SsisDeployment,
@@ -60,31 +62,86 @@ class TestUnitTypeFrequencyType:
 
         assert UnitTypeFrequencyType.MINUTE.value == expected
 
-    def test_UnitTypeFrequencyType_DAILY_equals_4(self):
+    def test_UnitTypeFrequencyType_DAY_equals_4(self):
         """
-        Test that UnitTypeFrequencyType.DAILY = 4
+        Test that UnitTypeFrequencyType.DAY = 4
         """
         expected = 4
 
-        assert UnitTypeFrequencyType.DAILY.value == expected
+        assert UnitTypeFrequencyType.DAY.value == expected
 
-class TestUnitTypeFrequencyInterval:
-    def test_UnitTypeFrequencyInterval_MINUTE_equals_1(self):
+    def test_UnitTypeFrequencyType_WEEK_equals_8(self):
         """
-        Test that UnitTypeFrequencyInterval.MINUTE = 1
+        Test that UnitTypeFrequencyType.WEEK = 8
+        """
+        expected = 8
+
+        assert UnitTypeFrequencyType.WEEK.value == expected
+
+    def test_UnitTypeFrequencyType_MONTH_equals_16(self):
+        """
+        Test that UnitTypeFrequencyType.MONTH = 16
+        """
+        expected = 16
+
+        assert UnitTypeFrequencyType.MONTH.value == expected
+
+class TestDayOfWeekFrequencyInterval:
+    def test_DayOfWeekFrequencyInterval_SUNDAY_equals_1(self):
+        """
+        Test that DayOfWeekFrequencyInterval.SUNDAY = 1
         """
         expected = 1
 
-        assert UnitTypeFrequencyInterval.MINUTE.value == expected
+        assert DayOfWeekFrequencyInterval.SUNDAY.value == expected
 
-    def test_UnitTypeFrequencyInterval_DAY_equals_4(self):
+    def test_DayOfWeekFrequencyInterval_MONDAY_equals_2(self):
         """
-        Test that UnitTypeFrequencyType.DAILY = 4
+        Test that DayOfWeekFrequencyInterval.MONDAY = 2
+        """
+        expected = 2
+
+        assert DayOfWeekFrequencyInterval.MONDAY.value == expected
+
+    def test_UnitTypeFrequencyInterval_TUESDAY_equals_4(self):
+        """
+        Test that DayOfWeekFrequencyInterval.TUESDAY = 4
         """
         expected = 4
 
-        assert UnitTypeFrequencyInterval.DAY.value == expected
+        assert DayOfWeekFrequencyInterval.TUESDAY.value == expected
 
+    def test_DayOfWeekFrequencyInterval_WEDNESDAY_equals_8(self):
+        """
+        Test that DayOfWeekFrequencyInterval.WEDNESDAY = 8
+        """
+        expected = 8
+
+        assert DayOfWeekFrequencyInterval.WEDNESDAY.value == expected
+
+    def test_DayOfWeekFrequencyInterval_THURSDAY_equals_16(self):
+        """
+        Test that DayOfWeekFrequencyInterval.THURSDAY = 16
+        """
+        expected = 16
+
+        assert DayOfWeekFrequencyInterval.THURSDAY.value == expected
+
+    def test_DayOfWeekFrequencyInterval_FRIDAY_equals_32(self):
+        """
+        Test that DayOfWeekFrequencyInterval.FRIDAY = 32
+        """
+        expected = 32
+
+        assert DayOfWeekFrequencyInterval.FRIDAY.value == expected
+
+    def test_DayOfWeekFrequencyInterval_SATURDAY_equals_64(self):
+        """
+        Test that DayOfWeekFrequencyInterval.SATURDAY = 64
+        """
+        expected = 64
+
+        assert DayOfWeekFrequencyInterval.SATURDAY.value == expected
 
 class TestFrequencyInterval:
     def test_FrequencyInterval_ONCE_equals_1(self):
@@ -226,7 +283,7 @@ class TestSsisDeployment:
         """
         Test number of job schedules is correct.
         """
-        expected = 2
+        expected = 4
         actual = load_configuration(toml.dumps(TEST_CONFIG))
         assert len(actual.job.schedules) == expected
 
@@ -235,8 +292,10 @@ class TestSsisDeployment:
         Test job schedules are set correctly.
         """
         expected = [
-            Schedule("Winter Moon", "DAY", 30, 200000),
-            Schedule("Autumn Mountain", "MINUTE", 1440, 000000),
+            Schedule("Winter Moon", "DAY", 30, "200000"),
+            Schedule("Autumn Mountain", "MINUTE", 1440, "000000"),
+            Schedule("Peaceful Valley", "WEEK", 1, "000000", ["MONDAY", "FRIDAY"]),
+            Schedule("Snowfall", "MONTH", 1, "000000", None, 15)
         ]
         actual = load_configuration(toml.dumps(TEST_CONFIG))
         assert actual.job.schedules == expected
@@ -253,7 +312,7 @@ class TestSsisDeployment:
         """
         Test the correct number of job schedules are set.
         """
-        expected = 2
+        expected = 4
         actual = len(load_configuration(toml.dumps(TEST_CONFIG)).job.schedules)
         assert actual == expected
 

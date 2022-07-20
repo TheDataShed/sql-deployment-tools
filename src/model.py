@@ -31,10 +31,18 @@ class NotifyLevelEmail(Enum):
 class UnitTypeFrequencyType(Enum):
     MINUTE = 4
     DAY = 4
+    WEEK = 8
+    MONTH = 16
 
-class UnitTypeFrequencyInterval(Enum):
-    MINUTE = 1
-    DAY = 4
+
+class DayOfWeekFrequencyInterval(Enum):
+    SUNDAY = 1
+    MONDAY = 2
+    TUESDAY = 4
+    WEDNESDAY = 8
+    THURSDAY = 16
+    FRIDAY = 32
+    SATURDAY = 64
 
 
 @dataclass
@@ -51,7 +59,14 @@ class Schedule:
     unit: str
     every_n_units: int
     schedule_time: str = "000000"
+    run_days: typing.Optional[typing.List[str]] = None
+    day_of_month: typing.Optional[int] = None
 
+    def __post_init__(self):
+        if self.unit == "WEEK" and not self.run_days:
+            raise ConfigurationError("'run_days must be provided.'")
+        elif self.unit == "MONTH" and not self.day_of_month:
+            raise ConfigurationError("'day_of_month must be provided.'")
 
 @dataclass
 class Step:
