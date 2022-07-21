@@ -12,6 +12,7 @@ from src.model import (
     FrequencyInterval,
     FrequencyType,
     DayOfWeekFrequencyInterval,
+    ScheduleQueryParameters,
     UnitTypeFrequencyType,
     NotifyLevelEmail,
     Schedule,
@@ -292,13 +293,26 @@ class TestSsisDeployment:
         Test job schedules are set correctly.
         """
         expected = [
-            Schedule("Winter Moon", "DAY", 30, "200000"),
-            Schedule("Autumn Mountain", "MINUTE", 1440, "000000"),
-            Schedule("Peaceful Valley", "WEEK", 1, "000000", ["MONDAY", "FRIDAY"]),
-            Schedule("Snowfall", "MONTH", 1, "000000", None, 15)
+            Schedule("Winter Moon", "DAY", 30, 200000),
+            Schedule("Autumn Mountain", "MINUTE", 1440, 0),
+            Schedule("Peaceful Valley", "WEEK", 1, 0, ["MONDAY", "FRIDAY"]),
+            Schedule("Snowfall", "MONTH", 1, 0, None, 15)
         ]
         actual = load_configuration(toml.dumps(TEST_CONFIG))
         assert actual.job.schedules == expected
+    
+    def test_SsisDeployment_Job_Schedule_Transforms_are_correct(self):
+        """
+        Test schedules transform into sp_schedule_job variables correctly
+        """
+        expected = [
+            ScheduleQueryParameters(4,30,1,0,0,200000),
+            ScheduleQueryParameters(4,1,4,1440,0,0),
+            ScheduleQueryParameters(8,34,1,0,1,0),
+            ScheduleQueryParameters(16,15,1,0,1,0)
+        ]
+        actual = load_configuration(toml.dumps(TEST_CONFIG))
+        assert [x.transform_for_query() for x in actual.job.schedules] == expected
 
     def test_SsisDeployment_job_step_count_is_set_correctly(self):
         """

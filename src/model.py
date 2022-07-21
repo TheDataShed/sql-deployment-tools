@@ -5,7 +5,7 @@ from enum import Enum
 
 from dataclasses_json import config, dataclass_json
 
-from src.exceptions import ConfigurationError
+from exceptions import ConfigurationError
 
 
 class FrequencyType(Enum):
@@ -52,21 +52,70 @@ class Parameter:
     sensitive: bool = False
 
 
+@dataclass
+class ScheduleQueryParameters:
+    freq_type: int
+    freq_interval: int
+    freq_subday_type: int
+    freq_subday_interval: int
+    freq_recurrence_factor: int
+    active_start_time: int
+
+
 @dataclass_json
 @dataclass
 class Schedule:
     name: str
     unit: str
     every_n_units: int
-    schedule_time: str = "000000"
+    schedule_time: int = 0
     run_days: typing.Optional[typing.List[str]] = None
     day_of_month: typing.Optional[int] = None
 
+    def transform_for_query(self) -> ScheduleQueryParameters:
+        if self.unit == "MINUTE":
+            return ScheduleQueryParameters(
+                UnitTypeFrequencyType.MINUTE.value,
+                1,
+                4,
+                self.every_n_units,
+                0,
+                self.schedule_time
+            )
+        if self.unit == "DAY":
+            return ScheduleQueryParameters(
+                UnitTypeFrequencyType.DAY.value,
+                self.every_n_units,
+                1,
+                0,
+                0,
+                self.schedule_time
+            )
+        if self.unit == "WEEK":
+            return ScheduleQueryParameters(
+                UnitTypeFrequencyType.WEEK.value,
+                sum([DayOfWeekFrequencyInterval[x].value for x in self.run_days]),
+                1,
+                0,
+                self.every_n_units,
+                self.schedule_time
+            )
+        if self.unit == "MONTH":
+            return ScheduleQueryParameters(
+                UnitTypeFrequencyType.MONTH.value,
+                self.day_of_month,
+                1,
+                0,
+                self.every_n_units,
+                self.schedule_time
+            )
+    
     def __post_init__(self):
         if self.unit == "WEEK" and not self.run_days:
             raise ConfigurationError("'run_days must be provided.'")
         elif self.unit == "MONTH" and not self.day_of_month:
             raise ConfigurationError("'day_of_month must be provided.'")
+
 
 @dataclass
 class Step:

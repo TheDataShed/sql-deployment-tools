@@ -5,8 +5,8 @@ import pyodbc
 import sqlparams
 
 from sql import query
-from src.exceptions import SqlAgentOperatorException
-from src.model import NotifyLevelEmail
+from exceptions import SqlAgentOperatorException
+from model import NotifyLevelEmail
 
 
 class Database:
@@ -235,22 +235,28 @@ class Database:
 
         self._agent_reset_job_step_flow(job_name)
 
-    def agent_create_job_schedule_occurs_every_n_units(
+    def agent_create_job_schedule(
         self,
         job_name: str,
         schedule_name: str,
-        unit: str,
-        every_n_units: int,
-        schedule_time: str,
+        freq_type: int,
+        freq_interval: int,
+        freq_subday_type: int,
+        freq_subday_interval: int,
+        freq_recurrence_factor: int,
+        active_start_time: int
     ):
         self._execute_sql(
             query.agent_create_job_schedule,
             {
                 "job_name": job_name,
                 "schedule_name": schedule_name,
-                "frequency_subday_type": UnitTypeFrequencyInterval[unit].value,
-                "every_n_units": every_n_units,
-                "hh_mm_ss": schedule_time
+                "freq_type": freq_type,
+                "freq_interval": freq_interval,
+                "freq_subday_type": freq_subday_type,
+                "freq_subday_interval": freq_subday_interval,
+                "freq_recurrence_factor": freq_recurrence_factor,
+                "active_start_time": active_start_time
             },
         )    
 
