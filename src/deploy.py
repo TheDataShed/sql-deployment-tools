@@ -7,7 +7,7 @@ def deploy_ssis(
     connection_string: str, ispac_path: str, ssis_deployment: SsisDeployment
 ):
     db = Database(connection_string)
-    
+
     project_name = ssis_deployment.project
     folder_name = ssis_deployment.folder
     environment_name = ssis_deployment.environment
