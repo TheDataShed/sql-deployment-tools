@@ -163,3 +163,14 @@ sql-deployment-tools deploy --replacement-tokens '{"SECRET_VALUE": "***"}'
 ```text
 Driver={SQL Server Native Client 11.0};Server=.;Database=SSISDB;Trusted_Connection=yes;
 ```
+
+### Schedules TOML keys
+
+| key             | type      | required            | allowable values                                                                      | description                                                       |
+|-----------------|-----------|---------------------|---------------------------------------------------------------------------------------|-------------------------------------------------------------------|
+| name            | str       | yes                 | any string                                                                            | schedule name                                                     |
+| unit            | str       | yes                 | "MINUTE"<br/>"DAY"<br/> "WEEK"<br/> "MONTH"                                                         | time unit                                                         |
+| every\_n\_units | int       | yes                 | any integer                                                                           | x value in: repeats every _x unit_s                               |
+| schedule\_time  | int       | no _default:0_      | integer time value HHMMSS in 24h clock <br/>e.g 0 is midnight, 70000 is 7am, 190000 is 7pm | job scheduled start time in 24h clock                             |
+| run\_days       | List[str] | when unit = "WEEK"  | str values: <br/>"SUNDAY"<br/> "MONDAY"<br/>"TUESDAY"<br/>"WEDNESDAY"<br/>"THURSDAY"<br/>"FRIDAY" "SATURDAY"    | days of the week that job should run                              |
+| day\_of\_month  | int       | when unit = "MONTH" | any integer                                                                           | day of the month to run scheduled job. 1 being first day of month |
