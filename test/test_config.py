@@ -4,9 +4,9 @@ import pytest
 import toml
 from typing_extensions import assert_type
 
-from src.config import load_configuration
-from src.exceptions import ConfigurationError
-from src.model import SsisDeployment
+from config import load_configuration
+from exceptions import ConfigurationError
+from model import SsisDeployment
 
 
 class TestConfig:
