@@ -5,9 +5,9 @@ import pytest
 import toml
 from typing_extensions import assert_type
 
-from config import load_configuration
-from exceptions import ConfigurationError
-from model import (
+from src.config import load_configuration
+from src.exceptions import ConfigurationError
+from src.model import (
     DayOfWeekFrequencyInterval,
     FrequencyInterval,
     FrequencyType,
