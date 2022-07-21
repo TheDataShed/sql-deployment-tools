@@ -1,12 +1,11 @@
-import datetime
 import os
 
 import pyodbc
 import sqlparams
 
-from sql import query
 from exceptions import SqlAgentOperatorException
 from model import NotifyLevelEmail
+from sql import query
 
 
 class Database:
@@ -244,7 +243,7 @@ class Database:
         freq_subday_type: int,
         freq_subday_interval: int,
         freq_recurrence_factor: int,
-        active_start_time: int
+        active_start_time: int,
     ):
         self._execute_sql(
             query.agent_create_job_schedule,
@@ -256,9 +255,9 @@ class Database:
                 "freq_subday_type": freq_subday_type,
                 "freq_subday_interval": freq_subday_interval,
                 "freq_recurrence_factor": freq_recurrence_factor,
-                "active_start_time": active_start_time
+                "active_start_time": active_start_time,
             },
-        )    
+        )
 
     def ssis_install_ispac(
         self,

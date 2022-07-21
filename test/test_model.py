@@ -1,5 +1,4 @@
 import copy
-import datetime
 from test.conftest import TEST_CONFIG
 
 import pytest
@@ -9,15 +8,15 @@ from typing_extensions import assert_type
 from src.config import load_configuration
 from src.exceptions import ConfigurationError
 from src.model import (
+    DayOfWeekFrequencyInterval,
     FrequencyInterval,
     FrequencyType,
-    DayOfWeekFrequencyInterval,
-    ScheduleQueryParameters,
-    UnitTypeFrequencyType,
     NotifyLevelEmail,
     Schedule,
+    ScheduleQueryParameters,
     SsisDeployment,
     Step,
+    UnitTypeFrequencyType,
 )
 
 
@@ -54,6 +53,7 @@ class TestFrequencyType:
 
         assert FrequencyType.MONTHLY.value == expected
 
+
 class TestUnitTypeFrequencyType:
     def test_UnitTypeFrequencyType_MINUTE_equals_4(self):
         """
@@ -86,6 +86,7 @@ class TestUnitTypeFrequencyType:
         expected = 16
 
         assert UnitTypeFrequencyType.MONTH.value == expected
+
 
 class TestDayOfWeekFrequencyInterval:
     def test_DayOfWeekFrequencyInterval_SUNDAY_equals_1(self):
@@ -143,6 +144,7 @@ class TestDayOfWeekFrequencyInterval:
         expected = 64
 
         assert DayOfWeekFrequencyInterval.SATURDAY.value == expected
+
 
 class TestFrequencyInterval:
     def test_FrequencyInterval_ONCE_equals_1(self):
@@ -296,20 +298,20 @@ class TestSsisDeployment:
             Schedule("Winter Moon", "DAY", 30, 200000),
             Schedule("Autumn Mountain", "MINUTE", 1440, 0),
             Schedule("Peaceful Valley", "WEEK", 1, 0, ["MONDAY", "FRIDAY"]),
-            Schedule("Snowfall", "MONTH", 1, 0, None, 15)
+            Schedule("Snowfall", "MONTH", 1, 0, None, 15),
         ]
         actual = load_configuration(toml.dumps(TEST_CONFIG))
         assert actual.job.schedules == expected
-    
+
     def test_SsisDeployment_Job_Schedule_Transforms_are_correct(self):
         """
         Test schedules transform into sp_schedule_job variables correctly
         """
         expected = [
-            ScheduleQueryParameters(4,30,1,0,0,200000),
-            ScheduleQueryParameters(4,1,4,1440,0,0),
-            ScheduleQueryParameters(8,34,1,0,1,0),
-            ScheduleQueryParameters(16,15,1,0,1,0)
+            ScheduleQueryParameters(4, 30, 1, 0, 0, 200000),
+            ScheduleQueryParameters(4, 1, 4, 1440, 0, 0),
+            ScheduleQueryParameters(8, 34, 1, 0, 1, 0),
+            ScheduleQueryParameters(16, 15, 1, 0, 1, 0),
         ]
         actual = load_configuration(toml.dumps(TEST_CONFIG))
         assert [x.transform_for_query() for x in actual.job.schedules] == expected

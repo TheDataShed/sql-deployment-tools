@@ -1,4 +1,3 @@
-import datetime
 import typing
 from dataclasses import dataclass, field
 from enum import Enum
@@ -80,7 +79,7 @@ class Schedule:
                 4,
                 self.every_n_units,
                 0,
-                self.schedule_time
+                self.schedule_time,
             )
         if self.unit == "DAY":
             return ScheduleQueryParameters(
@@ -89,7 +88,7 @@ class Schedule:
                 1,
                 0,
                 0,
-                self.schedule_time
+                self.schedule_time,
             )
         if self.unit == "WEEK":
             return ScheduleQueryParameters(
@@ -98,7 +97,7 @@ class Schedule:
                 1,
                 0,
                 self.every_n_units,
-                self.schedule_time
+                self.schedule_time,
             )
         if self.unit == "MONTH":
             return ScheduleQueryParameters(
@@ -107,9 +106,9 @@ class Schedule:
                 1,
                 0,
                 self.every_n_units,
-                self.schedule_time
+                self.schedule_time,
             )
-    
+
     def __post_init__(self):
         if self.unit == "WEEK" and not self.run_days:
             raise ConfigurationError("'run_days must be provided.'")

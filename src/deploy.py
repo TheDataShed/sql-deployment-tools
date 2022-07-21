@@ -5,7 +5,7 @@ from sql.db import Database
 
 def deploy_ssis(
     connection_string: str, ispac_path: str, ssis_deployment: SsisDeployment
-):  
+):
     db = Database(connection_string)
     project_name = ssis_deployment.project
     folder_name = ssis_deployment.folder
@@ -76,7 +76,7 @@ def deploy_ssis(
             parameters.freq_subday_type,
             parameters.freq_subday_interval,
             parameters.freq_recurrence_factor,
-            parameters.active_start_time
+            parameters.active_start_time,
         )
 
     if ssis_deployment.job.notification_email_address:
