@@ -1,12 +1,13 @@
-from exceptions import SqlAgentOperatorException
-from model import SsisDeployment
-from sql.db import Database
+from src.exceptions import SqlAgentOperatorException
+from src.model import SsisDeployment
+from src.sql.db import Database
 
 
 def deploy_ssis(
     connection_string: str, ispac_path: str, ssis_deployment: SsisDeployment
 ):
     db = Database(connection_string)
+    
     project_name = ssis_deployment.project
     folder_name = ssis_deployment.folder
     environment_name = ssis_deployment.environment

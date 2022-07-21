@@ -4,7 +4,7 @@ from enum import Enum
 
 from dataclasses_json import config, dataclass_json
 
-from exceptions import ConfigurationError
+from src.exceptions import ConfigurationError
 
 
 class FrequencyType(Enum):
