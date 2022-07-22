@@ -11,6 +11,7 @@ EXEC msdb.dbo.sp_add_jobschedule
    , @freq_relative_interval = 0
    , @freq_recurrence_factor = $freq_recurrence_factor
    , @active_start_time      = $active_start_time
+   , @active_end_time        = $active_end_time
    , @schedule_id            = @schedule_id OUTPUT
 ;
 

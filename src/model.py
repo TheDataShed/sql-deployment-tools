@@ -59,6 +59,7 @@ class ScheduleQueryParameters:
     freq_subday_interval: int
     freq_recurrence_factor: int
     active_start_time: int
+    active_end_time: int
 
 
 @dataclass_json
@@ -68,6 +69,8 @@ class Schedule:
     unit: str
     every_n_units: int
     schedule_time: int = 0
+    window_start: int = 0
+    window_end: int = 235959
     run_days: typing.Optional[typing.List[str]] = None
     day_of_month: typing.Optional[int] = None
 
@@ -79,7 +82,8 @@ class Schedule:
                 4,
                 self.every_n_units,
                 0,
-                self.schedule_time,
+                self.window_start,
+                self.window_end,
             )
         if self.unit == "DAY":
             return ScheduleQueryParameters(
@@ -89,6 +93,7 @@ class Schedule:
                 0,
                 0,
                 self.schedule_time,
+                235959,
             )
         if self.unit == "WEEK":
             return ScheduleQueryParameters(
@@ -98,6 +103,7 @@ class Schedule:
                 0,
                 self.every_n_units,
                 self.schedule_time,
+                235959,
             )
         if self.unit == "MONTH":
             return ScheduleQueryParameters(
@@ -107,6 +113,7 @@ class Schedule:
                 0,
                 self.every_n_units,
                 self.schedule_time,
+                235959,
             )
 
     def __post_init__(self):

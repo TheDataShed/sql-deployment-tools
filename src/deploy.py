@@ -78,6 +78,7 @@ def deploy_ssis(
             parameters.freq_subday_interval,
             parameters.freq_recurrence_factor,
             parameters.active_start_time,
+            parameters.active_end_time,
         )
 
     if ssis_deployment.job.notification_email_address:

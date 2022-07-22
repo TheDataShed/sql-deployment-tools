@@ -244,6 +244,7 @@ class Database:
         freq_subday_interval: int,
         freq_recurrence_factor: int,
         active_start_time: int,
+        active_end_time: int,
     ):
         self._execute_sql(
             query.agent_create_job_schedule,
@@ -256,6 +257,7 @@ class Database:
                 "freq_subday_interval": freq_subday_interval,
                 "freq_recurrence_factor": freq_recurrence_factor,
                 "active_start_time": active_start_time,
+                "active_end_time": active_end_time,
             },
         )
 
