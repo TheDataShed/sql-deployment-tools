@@ -1,3 +1,9 @@
+## 0.3.1 (2022-09-01)
+
+### Fix
+
+- Get Specific Environment Reference ID (#56)
+
 ## 0.3.0 (2022-07-06)
 
 ### Fix
