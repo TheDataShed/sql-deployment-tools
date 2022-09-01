@@ -167,6 +167,7 @@ class Database:
             {
                 "project_name": project_name,
                 "environment_name": environment_name,
+                "folder_name": folder_name,
             },
             return_results=True,
         )[0].environment_reference_id
