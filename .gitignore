@@ -146,3 +146,6 @@ settings.json
 
 # Test results
 test-results/
+
+# Mac Preferences File
+.DS_Store

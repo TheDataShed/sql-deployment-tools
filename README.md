@@ -114,11 +114,29 @@ tsql_command = "SELECT TOP 10 * FROM sys.objects"
 
 [[job.schedules]]
 name = "name1"
-every_n_minutes = 12
+unit = "DAY"
+every_n_units = 2
+schedule_time = 200000
 
 [[job.schedules]]
 name = "name2"
-every_n_minutes = 111
+unit = "MINUTE"
+every_n_units = 111
+
+[[job.schedules]]
+name = "name3"
+unit = "WEEK"
+every_n_units = 1
+run_days = [
+    "MONDAY",
+    "TUESDAY"
+    ]
+
+[[job.schedules]]
+name = "name4"
+unit = "MONTH"
+every_n_units = 3
+day_of_month = 12
 ```
 
 Note, when configuring a T-SQL step in an agent job, the default database
@@ -145,3 +163,16 @@ sql-deployment-tools deploy --replacement-tokens '{"SECRET_VALUE": "***"}'
 ```text
 Driver={SQL Server Native Client 11.0};Server=.;Database=SSISDB;Trusted_Connection=yes;
 ```
+
+### Schedules TOML keys
+
+| key | type | required | allowable values | description |
+|-----|------|----------|------------------|-------------|
+| name | str | yes | any string | schedule name |
+| unit | str | yes | "MINUTE"  "DAY"  "WEEK"  "MONTH" | time unit |
+| every\_n\_units | int | yes | any integer | x value in: repeats every _x unit_s |
+| schedule\_time  | int | no _default:0_      | integer time value HHMMSS in 24h clock  e.g 0 is midnight, 70000 is 7am, 190000 is 7pm | job scheduled start time in 24h clock |
+| run\_days       | List[str] | when unit = "WEEK" | str values: "SUNDAY"  "MONDAY"  "TUESDAY"  "WEDNESDAY"  "THURSDAY"  "FRIDAY"  "SATURDAY" | days of the week that job should run                              |
+| day\_of\_month | int | when unit = "MONTH" | any integer | day of the month to run scheduled job. 1 being first day of month |
+| window_start | int _default:0_| optional when unit = "MINUTE", ignored otherwise | integer time value HHMMSS in 24h clock  e.g 0 is midnight, 70000 is 7am, 190000 is 7pm | start time of window in which to run job |
+| window_end | int _default:235959_| optional when unit = "MINUTE", ignored otherwise | integer time value HHMMSS in 24h clock  e.g 0 is midnight, 70000 is 7am, 190000 is 7pm | end time of window in which to run job |

@@ -68,11 +68,17 @@ def deploy_ssis(
             )
 
     for job_schedule in ssis_deployment.job.schedules:
-        db.agent_create_job_schedule_occurs_every_n_minutes(
+        parameters = job_schedule.transform_for_query()
+        db.agent_create_job_schedule(
             job_name,
             job_schedule.name,
-            job_schedule.every_n_minutes,
-            job_schedule.start_time,
+            parameters.freq_type,
+            parameters.freq_interval,
+            parameters.freq_subday_type,
+            parameters.freq_subday_interval,
+            parameters.freq_recurrence_factor,
+            parameters.active_start_time,
+            parameters.active_end_time,
         )
 
     if ssis_deployment.job.notification_email_address:

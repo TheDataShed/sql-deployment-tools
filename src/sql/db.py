@@ -1,4 +1,3 @@
-import datetime
 import os
 
 import pyodbc
@@ -236,20 +235,30 @@ class Database:
 
         self._agent_reset_job_step_flow(job_name)
 
-    def agent_create_job_schedule_occurs_every_n_minutes(
+    def agent_create_job_schedule(
         self,
         job_name: str,
         schedule_name: str,
-        every_n_minutes: int,
-        start_time: datetime.time,
+        freq_type: int,
+        freq_interval: int,
+        freq_subday_type: int,
+        freq_subday_interval: int,
+        freq_recurrence_factor: int,
+        active_start_time: int,
+        active_end_time: int,
     ):
         self._execute_sql(
             query.agent_create_job_schedule,
             {
                 "job_name": job_name,
                 "schedule_name": schedule_name,
-                "occurs_every_n_minutes": every_n_minutes,
-                "hh_mm_ss": start_time.strftime("%H%M%S"),
+                "freq_type": freq_type,
+                "freq_interval": freq_interval,
+                "freq_subday_type": freq_subday_type,
+                "freq_subday_interval": freq_subday_interval,
+                "freq_recurrence_factor": freq_recurrence_factor,
+                "active_start_time": active_start_time,
+                "active_end_time": active_end_time,
             },
         )
 

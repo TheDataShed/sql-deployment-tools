@@ -28,8 +28,31 @@ TEST_CONFIG = {
             },
         ],
         "schedules": [
-            {"name": "Winter Moon", "every_n_minutes": 30},
-            {"name": "Autumn Mountain", "every_n_minutes": 1440},
+            {
+                "name": "Winter Moon",
+                "unit": "DAY",
+                "every_n_units": 30,
+                "schedule_time": 200000,
+            },
+            {
+                "name": "Autumn Mountain",
+                "unit": "MINUTE",
+                "every_n_units": 1440,
+                "window_start": 100000,
+                "window_end": 120000,
+            },
+            {
+                "name": "Peaceful Valley",
+                "unit": "WEEK",
+                "every_n_units": 1,
+                "run_days": ["MONDAY", "FRIDAY"],
+            },
+            {
+                "name": "Snowfall",
+                "unit": "MONTH",
+                "every_n_units": 1,
+                "day_of_month": 15,
+            },
         ],
     },
 }

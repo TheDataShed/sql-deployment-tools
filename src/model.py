@@ -1,4 +1,3 @@
-import datetime
 import typing
 from dataclasses import dataclass, field
 from enum import Enum
@@ -28,6 +27,23 @@ class NotifyLevelEmail(Enum):
     ALWAYS = 3
 
 
+class UnitTypeFrequencyType(Enum):
+    MINUTE = 4
+    DAY = 4
+    WEEK = 8
+    MONTH = 16
+
+
+class DayOfWeekFrequencyInterval(Enum):
+    SUNDAY = 1
+    MONDAY = 2
+    TUESDAY = 4
+    WEDNESDAY = 8
+    THURSDAY = 16
+    FRIDAY = 32
+    SATURDAY = 64
+
+
 @dataclass
 class Parameter:
     name: str
@@ -35,15 +51,76 @@ class Parameter:
     sensitive: bool = False
 
 
+@dataclass
+class ScheduleQueryParameters:
+    freq_type: int
+    freq_interval: int
+    freq_subday_type: int
+    freq_subday_interval: int
+    freq_recurrence_factor: int
+    active_start_time: int
+    active_end_time: int
+
+
 @dataclass_json
 @dataclass
 class Schedule:
     name: str
-    every_n_minutes: int
-    start_time: datetime.time = field(
-        default=datetime.time(hour=0, minute=0, second=0),
-        metadata=config(decoder=datetime.time.fromisoformat),
-    )
+    unit: str
+    every_n_units: int
+    schedule_time: int = 0
+    window_start: int = 0
+    window_end: int = 235959
+    run_days: typing.Optional[typing.List[str]] = None
+    day_of_month: typing.Optional[int] = None
+
+    def transform_for_query(self) -> ScheduleQueryParameters:
+        if self.unit == "MINUTE":
+            return ScheduleQueryParameters(
+                UnitTypeFrequencyType.MINUTE.value,
+                1,
+                4,
+                self.every_n_units,
+                0,
+                self.window_start,
+                self.window_end,
+            )
+        if self.unit == "DAY":
+            return ScheduleQueryParameters(
+                UnitTypeFrequencyType.DAY.value,
+                self.every_n_units,
+                1,
+                0,
+                0,
+                self.schedule_time,
+                235959,
+            )
+        if self.unit == "WEEK":
+            return ScheduleQueryParameters(
+                UnitTypeFrequencyType.WEEK.value,
+                sum([DayOfWeekFrequencyInterval[x].value for x in self.run_days]),
+                1,
+                0,
+                self.every_n_units,
+                self.schedule_time,
+                235959,
+            )
+        if self.unit == "MONTH":
+            return ScheduleQueryParameters(
+                UnitTypeFrequencyType.MONTH.value,
+                self.day_of_month,
+                1,
+                0,
+                self.every_n_units,
+                self.schedule_time,
+                235959,
+            )
+
+    def __post_init__(self):
+        if self.unit == "WEEK" and not self.run_days:
+            raise ConfigurationError("'run_days must be provided.'")
+        elif self.unit == "MONTH" and not self.day_of_month:
+            raise ConfigurationError("'day_of_month must be provided.'")
 
 
 @dataclass

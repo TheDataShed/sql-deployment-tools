@@ -1,5 +1,4 @@
 import copy
-import datetime
 from test.conftest import TEST_CONFIG
 
 import pytest
@@ -9,12 +8,15 @@ from typing_extensions import assert_type
 from src.config import load_configuration
 from src.exceptions import ConfigurationError
 from src.model import (
+    DayOfWeekFrequencyInterval,
     FrequencyInterval,
     FrequencyType,
     NotifyLevelEmail,
     Schedule,
+    ScheduleQueryParameters,
     SsisDeployment,
     Step,
+    UnitTypeFrequencyType,
 )
 
 
@@ -50,6 +52,98 @@ class TestFrequencyType:
         expected = 16
 
         assert FrequencyType.MONTHLY.value == expected
+
+
+class TestUnitTypeFrequencyType:
+    def test_UnitTypeFrequencyType_MINUTE_equals_4(self):
+        """
+        Test that UnitTypeFrequencyType.MINUTE = 4
+        """
+        expected = 4
+
+        assert UnitTypeFrequencyType.MINUTE.value == expected
+
+    def test_UnitTypeFrequencyType_DAY_equals_4(self):
+        """
+        Test that UnitTypeFrequencyType.DAY = 4
+        """
+        expected = 4
+
+        assert UnitTypeFrequencyType.DAY.value == expected
+
+    def test_UnitTypeFrequencyType_WEEK_equals_8(self):
+        """
+        Test that UnitTypeFrequencyType.WEEK = 8
+        """
+        expected = 8
+
+        assert UnitTypeFrequencyType.WEEK.value == expected
+
+    def test_UnitTypeFrequencyType_MONTH_equals_16(self):
+        """
+        Test that UnitTypeFrequencyType.MONTH = 16
+        """
+        expected = 16
+
+        assert UnitTypeFrequencyType.MONTH.value == expected
+
+
+class TestDayOfWeekFrequencyInterval:
+    def test_DayOfWeekFrequencyInterval_SUNDAY_equals_1(self):
+        """
+        Test that DayOfWeekFrequencyInterval.SUNDAY = 1
+        """
+        expected = 1
+
+        assert DayOfWeekFrequencyInterval.SUNDAY.value == expected
+
+    def test_DayOfWeekFrequencyInterval_MONDAY_equals_2(self):
+        """
+        Test that DayOfWeekFrequencyInterval.MONDAY = 2
+        """
+        expected = 2
+
+        assert DayOfWeekFrequencyInterval.MONDAY.value == expected
+
+    def test_UnitTypeFrequencyInterval_TUESDAY_equals_4(self):
+        """
+        Test that DayOfWeekFrequencyInterval.TUESDAY = 4
+        """
+        expected = 4
+
+        assert DayOfWeekFrequencyInterval.TUESDAY.value == expected
+
+    def test_DayOfWeekFrequencyInterval_WEDNESDAY_equals_8(self):
+        """
+        Test that DayOfWeekFrequencyInterval.WEDNESDAY = 8
+        """
+        expected = 8
+
+        assert DayOfWeekFrequencyInterval.WEDNESDAY.value == expected
+
+    def test_DayOfWeekFrequencyInterval_THURSDAY_equals_16(self):
+        """
+        Test that DayOfWeekFrequencyInterval.THURSDAY = 16
+        """
+        expected = 16
+
+        assert DayOfWeekFrequencyInterval.THURSDAY.value == expected
+
+    def test_DayOfWeekFrequencyInterval_FRIDAY_equals_32(self):
+        """
+        Test that DayOfWeekFrequencyInterval.FRIDAY = 32
+        """
+        expected = 32
+
+        assert DayOfWeekFrequencyInterval.FRIDAY.value == expected
+
+    def test_DayOfWeekFrequencyInterval_SATURDAY_equals_64(self):
+        """
+        Test that DayOfWeekFrequencyInterval.SATURDAY = 64
+        """
+        expected = 64
+
+        assert DayOfWeekFrequencyInterval.SATURDAY.value == expected
 
 
 class TestFrequencyInterval:
@@ -192,7 +286,7 @@ class TestSsisDeployment:
         """
         Test number of job schedules is correct.
         """
-        expected = 2
+        expected = 4
         actual = load_configuration(toml.dumps(TEST_CONFIG))
         assert len(actual.job.schedules) == expected
 
@@ -201,11 +295,33 @@ class TestSsisDeployment:
         Test job schedules are set correctly.
         """
         expected = [
-            Schedule("Winter Moon", 30, datetime.time(0, 0)),
-            Schedule("Autumn Mountain", 1440, datetime.time(0, 0)),
+            Schedule("Winter Moon", "DAY", 30, 200000),
+            Schedule(
+                "Autumn Mountain",
+                "MINUTE",
+                1440,
+                0,
+                100000,
+                120000,
+            ),
+            Schedule("Peaceful Valley", "WEEK", 1, 0, 0, 235959, ["MONDAY", "FRIDAY"]),
+            Schedule("Snowfall", "MONTH", 1, 0, 0, 235959, None, 15),
         ]
         actual = load_configuration(toml.dumps(TEST_CONFIG))
         assert actual.job.schedules == expected
+
+    def test_SsisDeployment_Job_Schedule_Transforms_are_correct(self):
+        """
+        Test schedules transform into sp_schedule_job variables correctly
+        """
+        expected = [
+            ScheduleQueryParameters(4, 30, 1, 0, 0, 200000, 235959),
+            ScheduleQueryParameters(4, 1, 4, 1440, 0, 100000, 120000),
+            ScheduleQueryParameters(8, 34, 1, 0, 1, 0, 235959),
+            ScheduleQueryParameters(16, 15, 1, 0, 1, 0, 235959),
+        ]
+        actual = load_configuration(toml.dumps(TEST_CONFIG))
+        assert [x.transform_for_query() for x in actual.job.schedules] == expected
 
     def test_SsisDeployment_job_step_count_is_set_correctly(self):
         """
@@ -219,7 +335,7 @@ class TestSsisDeployment:
         """
         Test the correct number of job schedules are set.
         """
-        expected = 2
+        expected = 4
         actual = len(load_configuration(toml.dumps(TEST_CONFIG)).job.schedules)
         assert actual == expected
 
@@ -369,8 +485,34 @@ class TestSsisDeployment:
         """
         config = copy.deepcopy(TEST_CONFIG)
         config["job"]["schedules"][0][
-            "every_n_minutes"
+            "every_n_units"
         ] = "No mistakes, just happy little accidents"
+
+        with pytest.raises(ConfigurationError):
+            load_configuration(toml.dumps(config))
+
+    def test_SsisDeployment_throws_an_exception_when_unit_is_day_and_run_days_missing(
+        self,
+    ):
+        """
+        Test that if unit = 'WEEK' and run_days not present there is an error.
+        """
+
+        config = copy.deepcopy(TEST_CONFIG)
+        del config["job"]["schedules"][2]["run_days"]
+
+        with pytest.raises(ConfigurationError):
+            load_configuration(toml.dumps(config))
+
+    def test_SsisDeployment_throws_exception_if_unit_is_month_and_day_of_month_missing(
+        self,
+    ):
+        """
+        Test that if unit = 'MONTH' and day_of_month not present there is an error.
+        """
+
+        config = copy.deepcopy(TEST_CONFIG)
+        del config["job"]["schedules"][3]["day_of_month"]
 
         with pytest.raises(ConfigurationError):
             load_configuration(toml.dumps(config))
